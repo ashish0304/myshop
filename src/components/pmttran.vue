@@ -1,0 +1,188 @@
+<template>
+  <v-container class="ma-0 pa-0" fluid>
+    <v-layout fluid>
+      <v-flex>
+        <v-select
+              v-bind:items="arrType"
+              v-model="txnType"
+              label="Payment For"
+              hide-details>
+        </v-select>
+      </v-flex>
+      <v-flex>
+        <v-select
+              :items="arrAcc"
+              v-model="txnAcc"
+              label="Account"
+              item-text="description"
+              item-value="id"
+              return-object
+              hide-details>
+        </v-select>
+      </v-flex>
+    </v-layout>
+    <v-layout fluid>
+      <v-flex v-show="!['W', 'T', 'C', 'D'].includes(txnType)">
+        <v-select
+              :items="arrPrt"
+              v-model="txnPrt"
+              label="Party"
+              item-text="description"
+              item-value="id"
+              placeholder="description"
+              :search-input.sync="searchPrt"
+              autocomplete
+              clearable
+              return-object
+              hide-details>
+        </v-select>
+      </v-flex>
+      <v-flex v-show="txnType=='T'" >
+        <v-select
+              :items="arrTgtAcc"
+              v-model="txnTgtAcc"
+              label="From Account"
+              item-text="description"
+              item-value="id"
+              return-object
+              hide-details>
+        </v-select>
+      </v-flex>
+      <v-flex>
+        <v-text-field
+              type="number"
+              v-model.number="txnAmount"
+              label="Amount"
+              :placeholder="txnPrt?txnPrt.balance:null"
+              @blur="txnAmount=parseFloat(txnAmount)"
+              hide-details>
+        </v-text-field>
+      </v-flex>
+    </v-layout>
+    <v-layout>
+      <v-flex xs12>
+        <v-text-field
+              v-model="txnComment"
+              label="Comment"
+              hide-details>
+        </v-text-field>
+      </v-flex>
+    </v-layout>
+    <v-layout>
+      <v-flex xs12>
+        <v-btn v-on:click.native="submitTrans" color="primary" small block>
+          Ok
+        </v-btn>
+      </v-flex>
+    </v-layout>
+    <v-data-table
+      :headers="head"
+      :items="data"
+      hide-actions
+      class="elevation-1" >
+      <template slot="items" slot-scope="props">
+        <td class="text-xs-left">{{ props.item.type }}</td>
+        <td class="text-xs-left">{{ new Date(props.item.date * 1000).toLocaleDateString() }}</td>
+        <td class="text-xs-left">{{ props.item.account }}
+          <router-link v-if="props.item.party" :to="'/party/'+props.item.prt_id">{{props.item.party}}</router-link>
+          <span v-if="props.item.comment">({{props.item.comment}})</span>
+        </td>
+        <td class="text-xs-right">{{ Number(props.item.amount).toFixed(2) }}</td>
+      </template>
+    </v-data-table>
+  </v-container>
+</template>
+
+<script>
+// import axios from 'axios'
+export default {
+  name: 'pmttran',
+  props: {
+    tranDate: String
+  },
+  data () {
+    return {
+      txnType: 'S',
+      arrType: [
+        {text: 'Sale', value: 'S'},
+        {text: 'Purchase', value: 'P'},
+        // {text: 'Bus/Transport', value: 'B'},
+        {text: 'Wages/Rent', value: 'W'},
+        {text: 'Transfer/Deposit', value: 'T'},
+        {text: 'Service Charges', value: 'C'},
+        {text: 'Petty Expenses', value: 'D'},
+        {text: 'Petty Loan Taken', value: 'H'},
+        {text: 'Petty Loan Given', value: 'G'}
+      ],
+      txnAcc: null,
+      arrAcc: [],
+      txnTgtAcc: null,
+      arrTgtAcc: [],
+      txnPrt: null,
+      arrPrt: [],
+      txnAmount: null,
+      txnComment: null,
+      searchPrt: null,
+      head: [
+        { text: 'Type', value: 'type', sortable: false, align: 'left' },
+        { text: 'Date', value: 'date', sortable: false, align: 'left' },
+        { text: 'Description', value: 'account', sortable: false, align: 'left' },
+        { text: 'Amount', value: 'amount', sortable: false }
+      ],
+      data: [],
+      trans: {}
+    }
+  },
+  created () {
+    this.getAccount()
+    this.getTrans()
+  },
+  watch: {
+    searchPrt (val) {
+      if (val.length < 3) { return }
+      this.$http.get('/api/parties/' + val).then((res) => {
+        this.arrPrt = res.data
+      })
+    },
+    txnAcc () {
+      this.arrTgtAcc = this.arrAcc.slice(0)
+      let ind = this.arrTgtAcc.findIndex(x => x.id === this.txnAcc.id)
+      this.arrTgtAcc.splice(ind, 1)
+    }
+  },
+  methods: {
+    submitTrans () {
+      this.trans.type = this.txnType
+      this.trans.date = Date.parse(this.tranDate + ' ' + new Date().toLocaleTimeString()) / 1000
+      this.trans.prt_id = this.txnPrt ? this.txnPrt.id : 0
+      this.trans.acc_id = this.txnAcc.id
+      this.trans.amount = parseInt(this.txnAmount)
+      this.trans.comment = this.txnComment
+      this.trans.tgt_acc_id = this.txnTgtAcc ? this.txnTgtAcc.id : 0
+      this.$http.post('/api/pmttran', this.trans).then((res) => {
+        this.txnPrt = null
+        this.arrPrt.splice(0, this.arrPrt.length)
+        this.txnTgtAcc = null
+        this.txnAmount = null
+        this.txnComment = null
+
+        this.getTrans()
+        this.tranOffset = 0
+      })
+    },
+    getAccount () {
+      this.$http.get('/api/account').then((res) => {
+        this.arrAcc = res.data
+        this.txnAcc = this.arrAcc[0]
+      })
+    },
+    getTrans () {
+      this.$http.get('/api/payments?limit=15').then((restran) => {
+        this.data = restran.data
+      })
+    }
+  },
+  computed: {
+  }
+}
+</script>
