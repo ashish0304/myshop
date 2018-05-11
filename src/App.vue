@@ -1,5 +1,5 @@
 <template>
-  <v-app class="ma-0 pa-0">
+  <v-app dark class="ma-0 pa-0">
     <v-toolbar height="30px">
       <v-btn to="/stktran" small flat class="ma-0 pa-0" style="min-width: 50px;">
         Stocks
