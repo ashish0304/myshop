@@ -5,6 +5,7 @@ import stktran from '@/components/stktran'
 import pmttran from '@/components/pmttran'
 import item from '@/components/item'
 import party from '@/components/party'
+import inventory from '@/components/inventory'
 import repstock from '@/components/repstock'
 import repprtbal from '@/components/repprtbal'
 import repdattran from '@/components/repdattran'
@@ -43,6 +44,11 @@ export default new Router({
       name: 'party',
       component: party,
       props: true
+    },
+    {
+      path: '/inventory',
+      name: 'inventory',
+      component: inventory
     },
     {
       path: '/repstock',

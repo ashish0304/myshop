@@ -41,6 +41,9 @@
           <v-list-tile to="/party">
             Party Details
           </v-list-tile>
+          <v-list-tile to="/inventory">
+            Inventory
+          </v-list-tile>
           <v-list-tile @click.native="logout">
             Logout
           </v-list-tile>
