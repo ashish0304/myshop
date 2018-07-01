@@ -35,7 +35,7 @@
         <td class="text-xs-right">{{ Number(props.item.quantity * props.item.rate).toFixed(2) }}</td>
       </template>
       <template slot="footer">
-        <td colspan="4" class="text-xs-right">Total</td>
+        <td colspan="4" class="text-xs-right">Total(Cost: {{ (totalCost(dataCsSale)).toFixed(2) }})</td>
         <td class="text-xs-right">{{ (totalItem(dataCsSale)).toFixed(2) }}</td>
       </template>
     </v-data-table>
@@ -59,7 +59,7 @@
         <td class="text-xs-right">{{ Number(props.item.quantity * props.item.rate).toFixed(2) }}</td>
       </template>
       <template slot="footer">
-        <td colspan="4" class="text-xs-right">Total</td>
+        <td colspan="4" class="text-xs-right">Total(Cost: {{ (totalCost(dataCrSale)).toFixed(2) }})</td>
         <td class="text-xs-right">{{ (totalItem(dataCrSale)).toFixed(2) }}</td>
       </template>
     </v-data-table>
@@ -287,6 +287,11 @@ export default {
     totalItem (d) {
       return d.reduce(function (a, b) {
         return a + (b.quantity * b.rate)
+      }, 0)
+    },
+    totalCost (d) {
+      return d.reduce(function (a, b) {
+        return a + b.cost
       }, 0)
     },
     totalPmt (d) {
