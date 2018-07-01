@@ -258,7 +258,7 @@ export default {
   },
   watch: {
     repLocation () {
-      this.$http.get(`/api/repdateitm?id=${this.repLocation}&dtfr=${(Date.parse(this.dtFrom) / 1000)}&dtto=${(Date.parse(this.dtTo) / 1000)}`).then((res) => {
+      this.$http.get(`/api/repdateitm?id=${this.repLocation}&dtfr=${(Date.parse(this.dtFrom) / 1000)}&dtto=${(Date.parse(this.dtTo) / 1000) + 86399}`).then((res) => {
         this.dataCsSale = res.data.cssale
         this.dataCrSale = res.data.crsale
         this.dataCsPurc = res.data.cspurc
