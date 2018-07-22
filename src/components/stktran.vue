@@ -76,9 +76,9 @@
       <v-flex xs4 v-show="txnLocation.dummy">
         <v-checkbox label="Update total" v-model="flgTotal" hide-details/>
       </v-flex>
-    </v-layout row wrap>
-    <v-layout row wrap>
-      <v-flex xs6>
+    </v-layout>
+    <v-layout fluid>
+      <v-flex>
         <v-select
               :items="arrItem"
               v-model="txnItem"
@@ -93,7 +93,7 @@
               hide-details>
         </v-select>
       </v-flex>
-      <v-flex xs3>
+      <v-flex>
         <v-text-field
               type="number"
               v-model="txnQuantity"
@@ -103,7 +103,7 @@
               hide-details>
         </v-text-field>
       </v-flex>
-      <v-flex xs3>
+      <v-flex v-show="txnType=='S' || txnType=='P'">
         <v-text-field
               type="number"
               v-model.number="txnRate"
@@ -115,7 +115,7 @@
     </v-layout>
     <v-layout row wrap>
       <v-flex xs6>
-        <v-btn :disabled="!txnItem || !txnQuantity || txnRate<=0" v-on:click.native="addItem" color="primary" small block>Add Item</v-btn>
+        <v-btn :disabled="!((((txnType=='S' || txnType=='P') && txnRate > 0) || (txnType=='T' || txnType=='A')) && (txnItem && txnQuantity != 0))" v-on:click.native="addItem" color="primary" small block>Add Item</v-btn>
       </v-flex>
       <v-flex xs6>
         <v-btn :disabled="!stock.length" v-on:click.native="submitTrans" color="primary" small block>Submit Stocks</v-btn>
@@ -279,8 +279,6 @@
         this.arrTgtLocation.splice(ind, 1)
       },
       addItem () {
-        // alert(Math.floor('-7-,8'))
-        if (!this.txnItem || !this.txnQuantity || !this.txnRate) { return }
         let tx = 0
         let qt = this.txnQuantity
         let rt = this.txnRate

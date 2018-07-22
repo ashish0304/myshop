@@ -1,10 +1,10 @@
 <template>
   <v-app dark class="ma-0 pa-0">
-    <v-toolbar height="30px">
+    <v-system-bar window class="ma-0 pa-0">
       <v-btn to="/stktran" small flat class="ma-0 pa-0" style="min-width: 50px;">
         Stocks
       </v-btn>
-      <v-btn to="/pmttran" small flat class="ma-0 pa-0" style="min-width: 50px;">
+      <v-btn to="/pmttran" small flat class="ma-2 pa-2" style="min-width: 50px;">
         Payments
       </v-btn>
       <v-menu offset-y>
@@ -31,15 +31,20 @@
       </v-menu>
       <input type="date" class="ma-0 pa-0" v-model="tranDate" style="width:105px;" />
       <v-menu offset-y>
-        <v-btn class="ma-0 pa-0" slot="activator" small flat icon>
-          <v-icon>account_circle</v-icon>
-        </v-btn>
+        <v-toolbar-side-icon class="ma-0 pa-0" slot="activator" small flat>
+        </v-toolbar-side-icon>
         <v-list dense>
           <v-list-tile to="/item">
             Item Details
           </v-list-tile>
           <v-list-tile to="/party">
             Party Details
+          </v-list-tile>
+          <v-list-tile to="/editstran">
+            Edit Stktran
+          </v-list-tile>
+          <v-list-tile to="/editptran">
+            Edit Pmttran
           </v-list-tile>
           <v-list-tile to="/inventory">
             Inventory
@@ -49,13 +54,13 @@
           </v-list-tile>
         </v-list>
       </v-menu>
-    </v-toolbar>
-  
+    </v-system-bar>
+
     <v-content>
-      <keep-alive include="stktran">
-      <router-view :tranDate="tranDate">
-        <v-container fluid></v-container>
-      </router-view>
+      <keep-alive>
+        <router-view :tranDate="tranDate">
+          <v-container fluid></v-container>
+        </router-view>
       </keep-alive>
     </v-content>
   </v-app>
