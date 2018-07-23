@@ -259,7 +259,6 @@
         })
       },
       updateData () {
-        alert(JSON.stringify(this.edit))
         this.$http.put('/api/rawstran', this.edit).then((res) => {
           this.dialog = false
         })

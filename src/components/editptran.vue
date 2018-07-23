@@ -189,7 +189,6 @@
       getAccount () {
         this.$http.get('/api/account').then((res) => {
           this.arrAccount = res.data
-          // this.fltAccount = this.arrAccount[0]
         })
       },
       gotoPage () {
@@ -202,7 +201,6 @@
         })
       },
       getData () {
-        // alert(JSON.stringify(this.fltAccount))
         let acc = this.fltAccount ? this.fltAccount.id : ''
         let typ = this.fltType ? this.fltType : ''
         let lim = this.pagination.rowsPerPage
@@ -210,11 +208,9 @@
           this.data = res.data.rows
           this.totalrows = res.data.len
           this.pagination.page = 1
-          // alert(JSON.stringify(this.data))
         })
       },
       updateData () {
-        alert(JSON.stringify(this.edit))
         this.$http.put('/api/rawptran', this.edit).then((res) => {
           this.dialog = false
         })
