@@ -77,7 +77,7 @@
             <v-flex xs12>
               <v-text-field
                 type="number"
-                v-model="edit.id"
+                v-model.number="edit.id"
                 label="ID"
                 hide-details>
               </v-text-field>
@@ -92,7 +92,7 @@
             <v-flex xs12>
               <v-text-field
                 type="number"
-                v-model="edit.date"
+                v-model.number="edit.date"
                 label="Date"
                 :value="edit.date"
                 hide-details>
@@ -101,7 +101,7 @@
             <v-flex xs12>
               <v-text-field
                 type="number"
-                v-model="edit.lcn_id"
+                v-model.number="edit.lcn_id"
                 label="Location"
                 hide-details>
               </v-text-field>
@@ -109,7 +109,7 @@
             <v-flex xs12>
               <v-text-field
                 type="number"
-                v-model="edit.prt_id"
+                v-model.number="edit.prt_id"
                 label="Party"
                 hide-details>
               </v-text-field>
@@ -117,7 +117,7 @@
             <v-flex xs12>
               <v-text-field
                 type="number"
-                v-model="edit.itm_id"
+                v-model.number="edit.itm_id"
                 label="Item"
                 hide-details>
               </v-text-field>
@@ -125,7 +125,7 @@
             <v-flex xs12>
               <v-text-field
                 type="number"
-                v-model="edit.quantity"
+                v-model.number="edit.quantity"
                 label="Quantity"
                 hide-details>
               </v-text-field>
@@ -133,7 +133,7 @@
             <v-flex xs12>
               <v-text-field
                 type="number"
-                v-model="edit.rate"
+                v-model.number="edit.rate"
                 label="Rate"
                 hide-details>
               </v-text-field>
@@ -141,7 +141,7 @@
             <v-flex xs12>
               <v-text-field
                 type="number"
-                v-model="edit.value"
+                v-model.number="edit.value"
                 label="Value"
                 hide-details>
               </v-text-field>
@@ -149,7 +149,7 @@
             <v-flex xs12>
               <v-text-field
                 type="number"
-                v-model="edit.tax"
+                v-model.number="edit.tax"
                 label="Tax"
                 hide-details>
               </v-text-field>
@@ -157,7 +157,7 @@
             <v-flex xs12>
               <v-text-field
                 type="number"
-                v-model="edit.cost"
+                v-model.number="edit.cost"
                 label="Cost"
                 hide-details>
               </v-text-field>

@@ -71,7 +71,7 @@
             <v-flex xs12>
               <v-text-field
                 type="number"
-                v-model="edit.date"
+                v-model.number="edit.date"
                 label="Date"
                 :value="edit.date"
                 hide-details>
@@ -80,7 +80,7 @@
             <v-flex xs12>
               <v-text-field
                 type="number"
-                v-model="edit.prt_id"
+                v-model.number="edit.prt_id"
                 label="Party"
                 hide-details>
               </v-text-field>
@@ -88,7 +88,7 @@
             <v-flex xs12>
               <v-text-field
                 type="number"
-                v-model="edit.txn_id"
+                v-model.number="edit.txn_id"
                 label="Transaction"
                 hide-details>
               </v-text-field>
@@ -96,7 +96,7 @@
             <v-flex xs12>
               <v-text-field
                 type="number"
-                v-model="edit.acc_id"
+                v-model.number="edit.acc_id"
                 label="Account"
                 hide-details>
               </v-text-field>
@@ -104,7 +104,7 @@
             <v-flex xs12>
               <v-text-field
                 type="number"
-                v-model="edit.amount"
+                v-model.number="edit.amount"
                 label="Amount"
                 hide-details>
               </v-text-field>
@@ -118,7 +118,8 @@
             </v-flex>
             <v-flex xs12>
               <v-text-field
-                v-model="edit.usr_id"
+                type="number"
+                v-model.number="edit.usr_id"
                 label="User ID"
                 hide-details>
               </v-text-field>
