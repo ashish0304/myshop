@@ -48,12 +48,12 @@
       hide-actions
       class="elevation-1" >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-left">{{new Date(props.item.date * 1000).toLocaleDateString()}}</td>
-        <td class="text-xs-left">{{props.item.type}}
-          <span v-if="props.item.prt_id>0"><router-link :to="'/party/'+props.item.prt_id">{{props.item.party}}</router-link></span>
-          <span v-if="props.item.comment">{{props.item.comment}}</span>
+        <td class="text-xs-left">{{ props.item.date | toDate }}</td>
+        <td class="text-xs-left">{{ props.item.type }}
+          <span v-if="props.item.prt_id>0"><router-link :to="'/party/'+props.item.prt_id">{{ props.item.party }}</router-link></span>
+          <span v-if="props.item.comment">{{ props.item.comment }}</span>
         </td>
-        <td class="text-xs-right">{{ props.item.amount.toFixed(2) }}</td>
+        <td class="text-xs-right">{{ props.item.amount | toAmount }}</td>
       </template>
     </v-data-table>
     <v-pagination v-model="pagination.page" :length="pages" circle>

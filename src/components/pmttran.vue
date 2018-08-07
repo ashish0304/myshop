@@ -3,69 +3,76 @@
     <v-layout fluid>
       <v-flex>
         <v-select
-              v-bind:items="arrType"
-              v-model="txnType"
-              label="Payment For"
-              hide-details>
+          v-bind:items="arrType"
+          v-model="txnType"
+          label="Payment For"
+          hide-details>
         </v-select>
       </v-flex>
       <v-flex>
         <v-select
-              :items="arrAcc"
-              v-model="txnAcc"
-              label="Account"
-              item-text="description"
-              item-value="id"
-              return-object
-              hide-details>
+          :items="arrAcc"
+          v-model="txnAcc"
+          label="Account"
+          item-text="description"
+          item-value="id"
+          return-object
+          hide-details>
         </v-select>
       </v-flex>
     </v-layout>
     <v-layout fluid>
       <v-flex v-show="!['W', 'T', 'C', 'D'].includes(txnType)">
         <v-select
-              :items="arrPrt"
-              v-model="txnPrt"
-              label="Party"
-              item-text="description"
-              item-value="id"
-              placeholder="description"
-              :search-input.sync="searchPrt"
-              autocomplete
-              clearable
-              return-object
-              hide-details>
+          :items="arrPrt"
+          v-model="txnPrt"
+          label="Party"
+          item-text="description"
+          item-value="id"
+          placeholder="description"
+          :search-input.sync="searchPrt"
+          autocomplete
+          clearable
+          return-object
+          hide-details>
         </v-select>
       </v-flex>
       <v-flex v-show="txnType=='T'" >
         <v-select
-              :items="arrTgtAcc"
-              v-model="txnTgtAcc"
-              label="From Account"
-              item-text="description"
-              item-value="id"
-              return-object
-              hide-details>
+          :items="arrTgtAcc"
+          v-model="txnTgtAcc"
+          label="From Account"
+          item-text="description"
+          item-value="id"
+          return-object
+          hide-details>
         </v-select>
       </v-flex>
       <v-flex>
         <v-text-field
-              type="number"
-              v-model.number="txnAmount"
-              label="Amount"
-              :placeholder="txnPrt?txnPrt.balance:null"
-              @blur="txnAmount=parseFloat(txnAmount)"
-              hide-details>
+          type="number"
+          v-model.number="txnAmount"
+          label="Amount"
+          :placeholder="txnPrt?txnPrt.balance:null"
+          @blur="txnAmount=parseFloat(txnAmount)"
+          hide-details>
         </v-text-field>
       </v-flex>
     </v-layout>
     <v-layout>
-      <v-flex xs12>
+      <v-flex xs8>
         <v-text-field
-              v-model="txnComment"
-              label="Comment"
-              hide-details>
+          v-model="txnComment"
+          label="Comment/Bank branch, cheque number"
+          hide-details>
         </v-text-field>
+      </v-flex>
+      <v-flex xs4>
+        <v-text-field
+          type="date"
+          label="Cheque Date"
+          v-model="dtCheque"
+          hide-details/>
       </v-flex>
     </v-layout>
     <v-layout>
@@ -82,12 +89,12 @@
       class="elevation-1" >
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.type }}</td>
-        <td class="text-xs-left">{{ new Date(props.item.date * 1000).toLocaleDateString() }}</td>
+        <td class="text-xs-left">{{ props.item.date | toDate }}</td>
         <td class="text-xs-left">{{ props.item.account }}
           <router-link v-if="props.item.party" :to="'/party/'+props.item.prt_id">{{props.item.party}}</router-link>
-          <span v-if="props.item.comment">({{props.item.comment}})</span>
+          <span v-if="props.item.comment">({{ props.item.comment }})</span>
         </td>
-        <td class="text-xs-right">{{ Number(props.item.amount).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ props.item.amount | toAmount }}</td>
       </template>
     </v-data-table>
   </v-container>
@@ -122,6 +129,7 @@ export default {
       arrPrt: [],
       txnAmount: null,
       txnComment: null,
+      dtCheque: null,
       searchPrt: null,
       head: [
         { text: 'Type', value: 'type', sortable: false, align: 'left' },
@@ -157,6 +165,7 @@ export default {
       this.trans.prt_id = this.txnPrt ? this.txnPrt.id : 0
       this.trans.acc_id = this.txnAcc.id
       this.trans.amount = parseInt(this.txnAmount)
+      this.trans.chq_date = Date.parse(this.dtCheque) / 1000
       this.trans.comment = this.txnComment
       this.trans.tgt_acc_id = this.txnTgtAcc ? this.txnTgtAcc.id : 0
       this.$http.post('/api/pmttran', this.trans).then((res) => {
@@ -165,6 +174,7 @@ export default {
         this.txnTgtAcc = null
         this.txnAmount = null
         this.txnComment = null
+        this.dtCheque = null
 
         this.getTrans()
         this.tranOffset = 0

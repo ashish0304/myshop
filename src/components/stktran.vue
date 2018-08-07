@@ -146,21 +146,21 @@
           </v-edit-dialog>
         </td>
         <td class="text-xs-right">
-          <v-edit-dialog>{{ Number(props.item.rate).toFixed(2) }}
+          <v-edit-dialog>{{ props.item.rate | toAmount }}
             <v-text-field slot="input" label="Rate" :value="props.item.rate"
               @blur="updateQtyRate(props.index, props.item.qty, $event.target.value)"
               single-line>
             </v-text-field>
           </v-edit-dialog>
         </td>
-        <td class="text-xs-right">{{ Number(props.item.val).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ props.item.val | toAmount }}</td>
       </template>
       <template slot="footer">
         <th colspan="3" class="text-xs-left">
-        Tax: {{tax.toFixed(2)}} Value: {{val.toFixed(2)}}
+        Tax: {{ tax | toAmount }} Value: {{ val | toAmount }}
         </th>
         <th class="text-xs-right">Total</th>
-        <th class="text-xs-right">{{(tax+val).toFixed(2)}}</th>
+        <th class="text-xs-right">{{ tax + val | toAmount }}</th>
       </template>
     </v-data-table>
     <v-pagination circle v-model="pagination.page" :length="pages">

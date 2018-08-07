@@ -28,15 +28,15 @@
       hide-actions
       class="elevation-1" >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-left">{{ new Date(props.item.date * 1000).toLocaleDateString() }}</td>
+        <td class="text-xs-left">{{ props.item.date | toDate }}</td>
         <td class="text-xs-left"><router-link :to="'/item/'+props.item.itm_id">{{ props.item.description }}</router-link></td>
         <td class="text-xs-right">{{ props.item.quantity }}</td>
-        <td class="text-xs-right">{{ Number(props.item.rate).toFixed(2) }}</td>
-        <td class="text-xs-right">{{ Number(props.item.quantity * props.item.rate).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ props.item.rate | toAount }}</td>
+        <td class="text-xs-right">{{ props.item.quantity * props.item.rate | toAmount }}</td>
       </template>
       <template slot="footer">
-        <td colspan="4" class="text-xs-right">Total(Cost: {{ (totalCost(dataCsSale)).toFixed(2) }})</td>
-        <td class="text-xs-right">{{ (totalItem(dataCsSale)).toFixed(2) }}</td>
+        <td colspan="4" class="text-xs-right">Total(Cost: {{ totalCost(dataCsSale) | toAmount }})</td>
+        <td class="text-xs-right">{{ totalItem(dataCsSale) | toAmount }}</td>
       </template>
     </v-data-table>
     <v-pagination v-model="pgnCsSale.page" :length="pages(pgnCsSale, dataCsSale)" circle>
@@ -52,15 +52,15 @@
       hide-actions
       class="elevation-1" >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-left">{{ new Date(props.item.date * 1000).toLocaleDateString() }}</td>
+        <td class="text-xs-left">{{ props.item.date | toDate }}</td>
         <td class="text-xs-left"><router-link :to="'/item/'+props.item.itm_id">{{ props.item.description }}</router-link></td>
         <td class="text-xs-right">{{ props.item.quantity }}</td>
-        <td class="text-xs-right">{{ Number(props.item.rate).toFixed(2) }}</td>
-        <td class="text-xs-right">{{ Number(props.item.quantity * props.item.rate).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ props.item.rate | toAmount }}</td>
+        <td class="text-xs-right">{{ props.item.quantity * props.item.rate | toAmount }}</td>
       </template>
       <template slot="footer">
-        <td colspan="4" class="text-xs-right">Total(Cost: {{ (totalCost(dataCrSale)).toFixed(2) }})</td>
-        <td class="text-xs-right">{{ (totalItem(dataCrSale)).toFixed(2) }}</td>
+        <td colspan="4" class="text-xs-right">Total(Cost: {{ totalCost(dataCrSale) | toAmount }})</td>
+        <td class="text-xs-right">{{ totalItem(dataCrSale) | toAmount }}</td>
       </template>
     </v-data-table>
     <v-pagination v-model="pgnCrSale.page" :length="pages(pgnCrSale, dataCrSale)" circle>
@@ -76,15 +76,15 @@
       hide-actions
       class="elevation-1" >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-left">{{ new Date(props.item.date * 1000).toLocaleDateString() }}</td>
+        <td class="text-xs-left">{{ props.item.date | toDate }}</td>
         <td class="text-xs-left"><router-link :to="'/item/'+props.item.itm_id">{{ props.item.description }}</router-link></td>
         <td class="text-xs-right">{{ props.item.quantity }}</td>
-        <td class="text-xs-right">{{ Number(props.item.rate).toFixed(2) }}</td>
-        <td class="text-xs-right">{{ Number(props.item.quantity * props.item.rate).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ props.item.rate | toAmount }}</td>
+        <td class="text-xs-right">{{ props.item.quantity * props.item.rate | toAmount }}</td>
       </template>
       <template slot="footer">
         <td colspan="4" class="text-xs-right">Total</td>
-        <td class="text-xs-right">{{ (totalItem(dataCsPurc)).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ totalItem(dataCsPurc) | toAmount }}</td>
       </template>
     </v-data-table>
     <v-pagination v-model="pgnCsPurc.page" :length="pages(pgnCsPurc, dataCsPurc)" circle>
@@ -100,15 +100,15 @@
       hide-actions
       class="elevation-1" >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-left">{{ new Date(props.item.date * 1000).toLocaleDateString() }}</td>
+        <td class="text-xs-left">{{ props.item.date | toDate }}</td>
         <td class="text-xs-left"><router-link :to="'/item/'+props.item.itm_id">{{ props.item.description }}</router-link></td>
         <td class="text-xs-right">{{ props.item.quantity }}</td>
-        <td class="text-xs-right">{{ Number(props.item.rate).toFixed(2) }}</td>
-        <td class="text-xs-right">{{ Number(props.item.quantity * props.item.rate).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ props.item.rate | toAmount }}</td>
+        <td class="text-xs-right">{{ props.item.quantity * props.item.rate | toAmount }}</td>
       </template>
       <template slot="footer">
         <td colspan="4" class="text-xs-right">Total</td>
-        <td class="text-xs-right">{{ (totalItem(dataCrPurc)).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ totalItem(dataCrPurc) | toAmount }}</td>
       </template>
     </v-data-table>
     <v-pagination v-model="pgnCrPurc.page" :length="pages(pgnCrPurc, dataCrPurc)" circle>
@@ -124,11 +124,11 @@
       hide-actions
       class="elevation-1" >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-left">{{ new Date(props.item.date * 1000).toLocaleDateString() }}</td>
+        <td class="text-xs-left">{{ props.item.date | toDate }}</td>
         <td class="text-xs-left"><router-link :to="'/item/'+props.item.itm_id">{{ props.item.description }}</router-link></td>
         <td class="text-xs-right">{{ props.item.quantity }}</td>
-        <td class="text-xs-right">{{ Number(props.item.rate).toFixed(2) }}</td>
-        <td class="text-xs-right">{{ Number(props.item.quantity * props.item.rate).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ props.item.rate | toAmount }}</td>
+        <td class="text-xs-right">{{ props.item.quantity * props.item.rate | toAmount }}</td>
       </template>
     </v-data-table>
     <v-pagination v-model="pgnTsfr.page" :length="pages(pgnTsfr, dataTsfr)" circle>
@@ -144,11 +144,11 @@
       hide-actions
       class="elevation-1" >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-left">{{ new Date(props.item.date * 1000).toLocaleDateString() }}</td>
+        <td class="text-xs-left">{{ props.item.date | toDate }}</td>
         <td class="text-xs-left"><router-link :to="'/item/'+props.item.itm_id">{{ props.item.description }}</router-link></td>
         <td class="text-xs-right">{{ props.item.quantity }}</td>
-        <td class="text-xs-right">{{ Number(props.item.rate).toFixed(2) }}</td>
-        <td class="text-xs-right">{{ Number(props.item.quantity * props.item.rate).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ props.item.rate | toAmount }}</td>
+        <td class="text-xs-right">{{ props.item.quantity * props.item.rate | toAmount }}</td>
       </template>
     </v-data-table>
     <v-pagination v-model="pgnAdjt.page" :length="pages(pgnAdjt, dataAdjt)" circle>
@@ -164,16 +164,16 @@
       hide-actions
       class="elevation-1" >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-left">{{ new Date(props.item.date * 1000).toLocaleDateString() }}</td>
+        <td class="text-xs-left">{{ props.item.date | toDate }}</td>
         <td class="text-xs-left">{{ props.item.type }}
           <router-link :to="'/party/'+props.item.prt_id">{{ props.item.party }}</router-link>
           {{ props.item.comment }}
         </td>
-        <td class="text-xs-right">{{ Number(props.item.amount).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ props.item.amount | toAmount }}</td>
       </template>
       <template slot="footer">
         <td colspan="2" class="text-xs-right">Total</td>
-        <td class="text-xs-right">{{ (totalPmt(dataAmPaid)).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ totalPmt(dataAmPaid) | toAmount }}</td>
       </template>
     </v-data-table>
     <v-pagination v-model="pgnAmPaid.page" :length="pages(pgnAmPaid, dataAmPaid)" circle>
@@ -189,16 +189,16 @@
       hide-actions
       class="elevation-1" >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-left">{{ new Date(props.item.date * 1000).toLocaleDateString() }}</td>
+        <td class="text-xs-left">{{ props.item.date | toDate }}</td>
         <td class="text-xs-left">{{ props.item.type }}
           <router-link :to="'/party/'+props.item.prt_id">{{ props.item.party }}</router-link>
           {{ props.item.comment }}
         </td>
-        <td class="text-xs-right">{{ Number(props.item.amount).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ props.item.amount | toAmount }}</td>
       </template>
       <template slot="footer">
         <td colspan="2" class="text-xs-right">Total</td>
-        <td class="text-xs-right">{{ (totalPmt(dataAmRecd)).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ totalPmt(dataAmRecd) | toAmount }}</td>
       </template>
     </v-data-table>
     <v-pagination v-model="pgnAmRecd.page" :length="pages(pgnAmRecd, dataAmRecd)" circle>

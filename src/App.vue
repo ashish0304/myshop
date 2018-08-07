@@ -24,6 +24,9 @@
           <v-list-tile to="/account">
             Accounts Info
           </v-list-tile>
+          <v-list-tile to="/cheques">
+            Cheques
+          </v-list-tile>
           <v-list-tile to="/replocn">
             Locationwise Details
           </v-list-tile>
@@ -57,7 +60,7 @@
     </v-system-bar>
 
     <v-content>
-      <keep-alive>
+      <keep-alive include="stktran">
         <router-view :tranDate="tranDate">
           <v-container fluid></v-container>
         </router-view>

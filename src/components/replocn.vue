@@ -24,9 +24,9 @@
       <template slot="items" slot-scope="props">
         <tr :class="[props.item.type==='Total'?'accent':'']">
         <td class="text-xs-left">{{ props.item.type }}</td>
-        <td class="text-xs-right">{{ Number(props.item.amount).toFixed(2) }}</td>
-        <td class="text-xs-right">{{ Number(props.item.tax).toFixed(2) }}</td>
-        <td class="text-xs-right">{{ Number(props.item.amount + props.item.tax).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ props.item.amount | toAmount }}</td>
+        <td class="text-xs-right">{{ props.item.tax | toAmount }}</td>
+        <td class="text-xs-right">{{ props.item.amount + props.item.tax | toAmount }}</td>
         </tr>
       </template>
     </v-data-table>

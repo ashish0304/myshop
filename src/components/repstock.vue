@@ -30,12 +30,12 @@
         <td class="text-xs-left col1"><router-link :to="'/item/'+props.item.itm_id">{{ props.item.description }}</router-link></td>
         <td class="text-xs-left col2">{{ props.item.hsn }}</td>
         <td class="text-xs-right col1">{{ props.item.quantity }}</td>
-        <td class="text-xs-right col2">{{ Number(props.item.cost).toFixed(2) }}</td>
-        <td class="text-xs-right col1">{{ Number(props.item.quantity * props.item.cost).toFixed(2) }}</td>
+        <td class="text-xs-right col2">{{ props.item.cost | toAmount }}</td>
+        <td class="text-xs-right col1">{{ props.item.quantity * props.item.cost | toAmount }}</td>
       </template>
       <template slot="footer">
         <td colspan="4" class="text-xs-right">Total</td>
-        <td class="text-xs-right">{{(total).toFixed(2)}}</td>
+        <td class="text-xs-right">{{ total | toAmount }}</td>
       </template>
     </v-data-table>
     <v-pagination v-model="pagination.page" :length="pages" circle>

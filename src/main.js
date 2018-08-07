@@ -50,3 +50,11 @@ new Vue({
     this.$vuetify.theme = theme
   }
 })
+
+Vue.filter('toAmount', function (value) {
+  return Number(value).toFixed(2)
+})
+
+Vue.filter('toDate', function (value) {
+  return new Date(value * 1000).toLocaleDateString()
+})

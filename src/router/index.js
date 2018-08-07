@@ -13,6 +13,7 @@ import replocn from '@/components/replocn'
 import account from '@/components/account'
 import editstran from '@/components/editstran'
 import editptran from '@/components/editptran'
+import cheques from '@/components/cheques'
 
 Vue.use(Router)
 
@@ -85,6 +86,12 @@ export default new Router({
       name: 'account',
       props: true,
       component: account
+    },
+    {
+      path: '/cheques',
+      name: 'cheques',
+      props: true,
+      component: cheques
     },
     {
       path: '/replocn',

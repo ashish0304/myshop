@@ -84,10 +84,10 @@
       class="elevation-1" >
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.type }}</td>
-        <td class="text-xs-left">{{ new Date(props.item.date * 1000).toLocaleDateString() }}</td>
+        <td class="text-xs-left">{{ props.item.date | toDate }}</td>
         <td class="text-xs-right">{{ props.item.quantity }}</td>
-        <td class="text-xs-right">{{ Number(props.item.rate).toFixed(2) }}</td>
-        <td class="text-xs-right">{{ Number(props.item.quantity * props.item.rate).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ props.item.rate | toAmount }}</td>
+        <td class="text-xs-right">{{ props.item.quantity * props.item.rate | toAmount }}</td>
       </template>
     </v-data-table>
     <v-layout row wrap>

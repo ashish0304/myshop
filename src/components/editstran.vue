@@ -46,19 +46,19 @@
             <v-icon small>edit</v-icon>
           </v-btn>
         </td>
-        <td>{{props.item.id}}</td>
-        <td>{{props.item.type}}</td>
-        <td>{{props.item.date}}</td>
-        <td>{{props.item.lcn_id}}</td>
-        <td>{{props.item.prt_id}}</td>
-        <td>{{props.item.itm_id}}</td>
-        <td>{{props.item.quantity}}</td>
-        <td class="text-xs-right">{{Number(props.item.rate).toFixed(2)}}</td>
-        <td class="text-xs-right">{{Number(props.item.value).toFixed(2)}}</td>
-        <td class="text-xs-right">{{Number(props.item.tax).toFixed(2)}}</td>
-        <td class="text-xs-right">{{Number(props.item.cost).toFixed(2)}}</td>
-        <td>{{props.item.usr_id}}</td>
-        <td>{{props.item.flag}}</td>
+        <td>{{ props.item.id }}</td>
+        <td>{{ props.item.type }}</td>
+        <td>{{ props.item.date | toDate}}</td>
+        <td>{{ props.item.lcn_id }}</td>
+        <td>{{ props.item.prt_id }}</td>
+        <td>{{ props.item.itm_id }}</td>
+        <td>{{ props.item.quantity }}</td>
+        <td class="text-xs-right">{{ props.item.rate | toAmount }}</td>
+        <td class="text-xs-right">{{ props.item.value | toAmount }}</td>
+        <td class="text-xs-right">{{ props.item.tax | toAmount }}</td>
+        <td class="text-xs-right">{{ props.item.cost | toAmount }}</td>
+        <td>{{ props.item.usr_id }}</td>
+        <td>{{ props.item.flag }}</td>
       </template>
     </v-data-table>
     <v-pagination circle

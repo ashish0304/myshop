@@ -37,15 +37,15 @@
             <v-icon small>edit</v-icon>
           </v-btn>
         </td>
-        <td>{{props.item.type}}</td>
-        <td>{{props.item.date}}</td>
-        <td>{{props.item.prt_id}}</td>
-        <td>{{props.item.txn_id}}</td>
-        <td>{{props.item.acc_id}}</td>
-        <td class="text-xs-right">{{Number(props.item.amount).toFixed(2)}}</td>
-        <td>{{props.item.comment}}</td>
-        <td>{{props.item.usr_id}}</td>
-        <td>{{props.item.flag}}</td>
+        <td>{{ props.item.type }}</td>
+        <td>{{ props.item.date | toDate }}</td>
+        <td>{{ props.item.prt_id }}</td>
+        <td>{{ props.item.txn_id }}</td>
+        <td>{{ props.item.acc_id }}</td>
+        <td class="text-xs-right">{{ props.item.amount | toAmount }}</td>
+        <td>{{ props.item.comment }}</td>
+        <td>{{ props.item.usr_id }}</td>
+        <td>{{ props.item.flag }}</td>
       </template>
     </v-data-table>
     <v-pagination circle

@@ -45,11 +45,18 @@
       </v-flex>
     </v-layout>
     <v-layout row wrap>
-      <v-flex xs12>
+      <v-flex xs8>
         <v-text-field
           v-model="txnParty.address"
           placeholder="Address"
           label="Address"
+          hide-details>
+        </v-text-field>
+      </v-flex>
+      <v-flex xs4>
+        <v-text-field
+          v-model="txnParty.chq_amt"
+          label="Cheque Amt"
           hide-details>
         </v-text-field>
       </v-flex>
@@ -71,11 +78,11 @@
       class="elevation-1" >
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.type }}</td>
-        <td class="text-xs-left">{{ new Date(props.item.date * 1000).toLocaleDateString() }}</td>
+        <td class="text-xs-left">{{ props.item.date | toDate }}</td>
         <td class="text-xs-left">{{ props.item.item }}</td>
         <td class="text-xs-right">{{ props.item.quantity }}</td>
-        <td class="text-xs-right">{{ Number(props.item.rate).toFixed(2) }}</td>
-        <td class="text-xs-right">{{ Number(props.item.quantity*props.item.rate).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ props.item.rate | toAmount }}</td>
+        <td class="text-xs-right">{{ props.item.quantity * props.item.rate | toAmount }}</td>
       </template>
     </v-data-table>
     <v-layout row wrap>
@@ -96,9 +103,9 @@
       class="elevation-1" >
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.type }}</td>
-        <td class="text-xs-left">{{ new Date(props.item.date * 1000).toLocaleDateString() }}</td>
+        <td class="text-xs-left">{{ props.item.date | toDate }}</td>
         <td class="text-xs-left">{{ props.item.account }}</td>
-        <td class="text-xs-right">{{ Number(props.item.amount).toFixed(2) }}</td>
+        <td class="text-xs-right">{{ props.item.amount | toAmount }}</td>
       </template>
     </v-data-table>
     <v-layout row wrap>
@@ -130,7 +137,8 @@ export default {
         description: '',
         address: '',
         gstn: '',
-        balance: ''
+        balance: '',
+        chq_amt: ''
       },
       headItm: [
         { text: 'Type', value: 'type', sortable: false, align: 'left' },
@@ -192,6 +200,7 @@ export default {
       this.$set(this.txnParty, 'address', '')
       this.$set(this.txnParty, 'gstn', '')
       this.$set(this.txnParty, 'balance', 0)
+      this.$set(this.txnParty, 'chq_amt', 0)
       this.dataItm.splice(0, this.dataItm.length)
       this.dataPmt.splice(0, this.dataPmt.length)
       this.itmOffset = 0
@@ -199,6 +208,7 @@ export default {
     },
     getParty (id) {
       this.$http.get(`/api/party/${id}`).then((res) => {
+        // alert(JSON.stringify(res.data))
         this.txnParty = res.data
         this.arrParty.splice(0, this.arrParty.length)
         this.arrParty.push(this.txnParty)

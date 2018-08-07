@@ -7,12 +7,19 @@
       hide-actions
       class="elevation-1" >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-left"><router-link :to="'/party/'+props.item.id">{{ props.item.description }}</router-link></td>
-        <td class="text-xs-right">{{ Number(props.item.balance).toFixed(2) }}</td>
+        <td class="text-xs-left">
+          <span style="float: left;">
+            <router-link :to="'/party/'+props.item.id">{{ props.item.description }}</router-link>
+          </span>
+          <span v-show="props.item.chq_amt>0" style="float: right;">
+            Cheque:{{ props.item.chq_amt | toAmount }}
+          </span>
+        </td>
+        <td class="text-xs-right">{{ props.item.balance | toAmount }}</td>
       </template>
       <template slot="footer">
         <td class="text-xs-right">Total</td>
-        <td class="text-xs-right">{{(totalR).toFixed(2)}}</td>
+        <td class="text-xs-right">{{ totalR | toAmount }}</td>
       </template>
     </v-data-table>
     <v-pagination v-model="paginationR.page" :length="pagesR" circle>
@@ -24,12 +31,19 @@
       hide-actions
       class="elevation-1" >
       <template slot="items" slot-scope="props">
-        <td class="text-xs-left"><router-link :to="'/party/'+props.item.id">{{ props.item.description }}</router-link></td>
-        <td class="text-xs-right">{{ Number(props.item.balance).toFixed(2) }}</td>
+        <td class="text-xs-left">
+          <span style="float: left;">
+            <router-link :to="'/party/'+props.item.id">{{ props.item.description }}</router-link>
+          </span>
+          <span v-show="props.item.chq_amt>0" style="float: right;">
+            Cheque:{{ props.item.chq_amt | toAmount }}
+          </span>
+        </td>
+        <td class="text-xs-right">{{ props.item.balance | toAmount }}</td>
       </template>
       <template slot="footer">
         <td class="text-xs-right">Total</td>
-        <td class="text-xs-right">{{(totalP).toFixed(2)}}</td>
+        <td class="text-xs-right">{{ totalP | toAmount }}</td>
       </template>
     </v-data-table>
     <v-pagination v-model="paginationP.page" :length="pagesP" circle>
