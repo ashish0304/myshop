@@ -256,6 +256,7 @@
       updateQtyRate (i, q, r) {
         let qt = Math.floor(q)
         let rt = Number(r)
+        i = ((this.pagination.page - 1) * this.pagination.rowsPerPage) + i
         if (qt === 0 || !qt || rt <= 0 || !rt) { return }
         this.stock[i].cost = qt * (this.stock[i].cost / this.stock[i].qty)
         this.stock[i].qty = qt
