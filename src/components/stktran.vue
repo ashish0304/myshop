@@ -21,7 +21,7 @@
         </v-select>
       </v-flex>
       <v-flex v-show="txnType=='S' || txnType=='P'">
-        <v-select
+        <v-autocomplete
               :items="arrParty"
               v-model="txnParty"
               label="Party"
@@ -29,11 +29,12 @@
               item-value="id"
               placeholder="CASH"
               :search-input.sync="searchParty"
-              autocomplete
+              hide-selected
+              hide-no-data
               clearable
               return-object
               hide-details>
-        </v-select>
+        </v-autocomplete>
       </v-flex>
     </v-layout>
     <v-layout fluid>
@@ -79,7 +80,7 @@
     </v-layout>
     <v-layout fluid>
       <v-flex>
-        <v-select
+        <v-autocomplete
               :items="arrItem"
               v-model="txnItem"
               label="Description"
@@ -87,11 +88,12 @@
               item-value="id"
               placeholder="Description"
               :search-input.sync="searchItem"
-              autocomplete
               clearable
+              hide-selected
+              hide-no-data
               return-object
               hide-details>
-        </v-select>
+        </v-autocomplete>
       </v-flex>
       <v-flex>
         <v-text-field

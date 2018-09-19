@@ -52,7 +52,7 @@
     </v-data-table>
     <v-layout fluid>
       <v-flex xs6>
-        <v-select
+        <v-autocomplete
               :items="arrItem"
               v-model="txnItem"
               label="Item"
@@ -60,11 +60,12 @@
               item-value="id"
               placeholder="Item"
               :search-input.sync="searchItem"
-              autocomplete
+              hide-selected
+              hide-no-data
               clearable
               return-object
               hide-details>
-        </v-select>
+        </v-autocomplete>
       </v-flex>
       <v-flex xs3>
         <v-text-field

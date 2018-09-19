@@ -23,7 +23,7 @@
     </v-layout>
     <v-layout fluid>
       <v-flex v-show="!['W', 'T', 'C', 'D'].includes(txnType)">
-        <v-select
+        <v-autocomplete
           :items="arrPrt"
           v-model="txnPrt"
           label="Party"
@@ -31,11 +31,12 @@
           item-value="id"
           placeholder="description"
           :search-input.sync="searchPrt"
-          autocomplete
+          hide-selected
+          hide-no-data
           clearable
           return-object
           hide-details>
-        </v-select>
+        </v-autocomplete>
       </v-flex>
       <v-flex v-show="txnType=='T'" >
         <v-select

@@ -2,7 +2,7 @@
   <v-container class="ma-0 pa-0" fluid>
     <v-layout row wrap>
       <v-flex xs8>
-        <v-select
+        <v-autocomplete
           :items="arrItem"
           v-model="txnItem"
           item-text="description"
@@ -10,11 +10,12 @@
           label="Description"
           placeholder="Description"
           :search-input.sync="searchItem"
-          autocomplete
+          hide-selected
+          hide-no-data
           return-object
           clearable
           hide-details>
-        </v-select>
+        </v-autocomplete>
       </v-flex>
       <v-flex xs4>
         <v-text-field
