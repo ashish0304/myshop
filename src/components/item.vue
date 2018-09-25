@@ -10,7 +10,7 @@
           label="Description"
           placeholder="Description"
           :search-input.sync="searchItem"
-          hide-selected
+          :loading="ldgItem"
           hide-no-data
           return-object
           clearable
@@ -129,6 +129,7 @@ export default {
         { text: 'Rate', value: 'rate', sortable: false, align: 'right' },
         { text: 'Total', value: 'total', sortable: false, align: 'right' }
       ],
+      ldgItem: false,
       data: [],
       itmOffset: 0,
       searchItem: null
@@ -158,10 +159,12 @@ export default {
       this.getTrans(this.txnItem.id)
     },
     searchItem (val) {
-      if (val.length < 3) { return }
+      if (this.arrItem.length > 0) { return }
+      this.ldgItem = true
+
       this.$http.get(`/api/items?desc=${val}`).then((res) => {
         this.arrItem = res.data
-      })
+      }).finally(() => (this.ldgItem = false))
     }
   },
   methods: {

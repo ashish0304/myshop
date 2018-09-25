@@ -31,7 +31,7 @@
           item-value="id"
           placeholder="description"
           :search-input.sync="searchPrt"
-          hide-selected
+          :loading="ldgParty"
           hide-no-data
           clearable
           return-object
@@ -128,6 +128,7 @@ export default {
       arrTgtAcc: [],
       txnPrt: null,
       arrPrt: [],
+      ldgParty: false,
       txnAmount: null,
       txnComment: null,
       dtCheque: null,
@@ -148,10 +149,12 @@ export default {
   },
   watch: {
     searchPrt (val) {
-      if (val.length < 3) { return }
+      if (this.arrPrt.length > 0) { return }
+      this.ldgParty = true
+
       this.$http.get('/api/parties/' + val).then((res) => {
         this.arrPrt = res.data
-      })
+      }).finally(() => (this.ldgParty = false))
     },
     txnAcc () {
       this.arrTgtAcc = this.arrAcc.slice(0)

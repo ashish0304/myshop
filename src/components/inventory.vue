@@ -60,7 +60,7 @@
               item-value="id"
               placeholder="Item"
               :search-input.sync="searchItem"
-              hide-selected
+              :loading="ldgItem"
               hide-no-data
               clearable
               return-object
@@ -96,6 +96,7 @@ export default {
       txnLocation: null,
       arrItem: [],
       txnItem: null,
+      ldgItem: false,
       txnQuantity: 0,
       header: [
         { text: '', value: '', sortable: false },
@@ -124,10 +125,12 @@ export default {
       })
     },
     searchItem (val) {
-      if (val.length < 3) { return }
+      if (this.arrItem.length > 0) { return }
+      this.ldgItem = true
+
       this.$http.get(`/api/items?desc=${val}`).then((res) => {
         this.arrItem = res.data
-      })
+      }).finally(() => (this.ldgItem = false))
     }
   },
   methods: {

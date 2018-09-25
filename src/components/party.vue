@@ -10,7 +10,7 @@
           label="Description"
           placeholder="Description"
           :search-input.sync="searchParty"
-          hide-selected
+          :loading="ldgParty"
           hide-no-data
           return-object
           clearable
@@ -141,6 +141,7 @@ export default {
         balance: '',
         chq_amt: ''
       },
+      ldgParty: false,
       headItm: [
         { text: 'Type', value: 'type', sortable: false, align: 'left' },
         { text: 'Date', value: 'date', sortable: false, align: 'left' },
@@ -187,10 +188,12 @@ export default {
       this.getPmtTrans(this.txnParty.id)
     },
     searchParty (val) {
-      if (val.length < 3) { return }
+      if (this.arrParty.length > 0) { return }
+      this.ldgParty = true
+
       this.$http.get('/api/parties/' + val).then((res) => {
         this.arrParty = res.data
-      })
+      }).finally(() => (this.ldgParty = false))
     }
   },
   methods: {

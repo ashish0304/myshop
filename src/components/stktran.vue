@@ -29,10 +29,10 @@
               item-value="id"
               placeholder="CASH"
               :search-input.sync="searchParty"
-              hide-selected
-              hide-no-data
+              :loading="ldgParty"
               clearable
               return-object
+              hide-no-data
               hide-details>
         </v-autocomplete>
       </v-flex>
@@ -88,10 +88,10 @@
               item-value="id"
               placeholder="Description"
               :search-input.sync="searchItem"
+              :loading="ldgItem"
               clearable
-              hide-selected
-              hide-no-data
               return-object
+              hide-no-data
               hide-details>
         </v-autocomplete>
       </v-flex>
@@ -193,9 +193,11 @@
         arrTgtLocation: [],
         txnParty: null,
         arrParty: [],
+        ldgParty: false,
         searchParty: null,
         txnItem: null,
         arrItem: [],
+        ldgItem: false,
         searchItem: null,
         itemQOH: null,
         txnQuantity: null,
@@ -226,21 +228,25 @@
     },
     watch: {
       searchParty (val) {
-        if (val.length < 3) { return }
+        if (this.arrParty.length > 0) { return }
+        this.ldgParty = true
+
         this.$http.get(`/api/partyacc/${val}`).then((res) => {
           this.arrParty = res.data
-        })
+        }).finally(() => (this.ldgParty = false))
       },
       searchItem (val) {
-        if (val.length < 3) { return }
+        if (this.arrItem.length > 0) { return }
+        this.ldgItem = true
+
         this.$http.get(`/api/items?desc=${val}`).then((res) => {
           this.arrItem = res.data
-        })
+        }).finally(() => (this.ldgItem = false))
       },
       txnItem: function () {
+        alert(this.txnItem.value)
         if (!this.txnItem) {
           this.itemQOH = null
-          this.arrItem.splice(0, this.arrItem.length)
           return
         }
         this.$http.get(`/api/stock/${this.txnLocation.id}/${this.txnItem.id}`).then((res) => {
