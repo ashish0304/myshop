@@ -244,7 +244,6 @@
         }).finally(() => (this.ldgItem = false))
       },
       txnItem: function () {
-        alert(this.txnItem.value)
         if (!this.txnItem) {
           this.itemQOH = null
           return
