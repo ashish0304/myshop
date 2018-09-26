@@ -156,6 +156,11 @@ export default {
         this.arrPrt = res.data
       }).finally(() => (this.ldgParty = false))
     },
+    txnPrt: function () {
+      if (!this.txnPrt) {
+        this.arrPrt.splice(0, this.arrPrt.length)
+      }
+    },
     txnAcc () {
       this.arrTgtAcc = this.arrAcc.slice(0)
       let ind = this.arrTgtAcc.findIndex(x => x.id === this.txnAcc.id)

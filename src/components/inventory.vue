@@ -131,6 +131,11 @@ export default {
       this.$http.get(`/api/items?desc=${val}`).then((res) => {
         this.arrItem = res.data
       }).finally(() => (this.ldgItem = false))
+    },
+    txnItem: function () {
+      if (!this.txnItem) {
+        this.arrItem.splice(0, this.arrItem.length)
+      }
     }
   },
   methods: {

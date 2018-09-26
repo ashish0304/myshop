@@ -182,6 +182,7 @@ export default {
     txnParty () {
       if (!this.txnParty) {
         this.initBlank()
+        this.arrParty.splice(0, this.arrParty.length)
         return
       }
       this.getItmTrans(this.txnParty.id)

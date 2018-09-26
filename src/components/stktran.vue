@@ -243,9 +243,15 @@
           this.arrItem = res.data
         }).finally(() => (this.ldgItem = false))
       },
+      txnParty: function () {
+        if (!this.txnParty) {
+          this.arrParty.splice(0, this.arrParty.length)
+        }
+      },
       txnItem: function () {
         if (!this.txnItem) {
           this.itemQOH = null
+          this.arrItem.splice(0, this.arrItem.length)
           return
         }
         this.$http.get(`/api/stock/${this.txnLocation.id}/${this.txnItem.id}`).then((res) => {

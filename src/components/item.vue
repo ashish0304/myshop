@@ -154,6 +154,7 @@ export default {
     txnItem () {
       if (!this.txnItem) {
         this.initBlank()
+        this.arrItem.splice(0, this.arrItem.length)
         return
       }
       this.getTrans(this.txnItem.id)
