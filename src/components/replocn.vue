@@ -58,13 +58,10 @@ export default {
   created () {
     // alert(this.tranDate)
     this.repMonth = this.tranDate.substring(0, 7)
-    this.$http.get('/api/location').then((res) => {
+    this.$http.get('/api/location', {httpProgress: true}).then((res) => {
       this.arrLocation = res.data
       this.getData()
     })
-  },
-  mounted () {
-    // alert(this.tranDate)
   },
   watch: {
     repMonth () {
@@ -81,7 +78,7 @@ export default {
   },
   methods: {
     getData () {
-      this.$http.get(`/api/replcnstat?locn=${this.repLocation}&month=${this.repMonth}`).then((res) => {
+      this.$http.get(`/api/replcnstat?locn=${this.repLocation}&month=${this.repMonth}`, {httpProgress: true}).then((res) => {
         this.data.splice(0, this.data.length)
         if (!res.data.length) {
           return

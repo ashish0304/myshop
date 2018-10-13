@@ -212,7 +212,7 @@ export default {
       this.pmtOffset = 0
     },
     getParty (id) {
-      this.$http.get(`/api/party/${id}`).then((res) => {
+      this.$http.get(`/api/party/${id}`, {httpProgress: true}).then((res) => {
         // alert(JSON.stringify(res.data))
         this.txnParty = res.data
         this.arrParty.splice(0, this.arrParty.length)
@@ -221,7 +221,7 @@ export default {
     },
     getItmTrans (id) {
       if (id < 1) { return }
-      this.$http.get(`/api/party/${id}/items?offset=${this.itmOffset}&limit=5`).then((restran) => {
+      this.$http.get(`/api/party/${id}/items?offset=${this.itmOffset}&limit=5`, {httpProgress: true}).then((restran) => {
         if (restran.data.length > 0) {
           this.dataItm = restran.data
         } else if (this.dataItm.length > 0) {
@@ -248,7 +248,7 @@ export default {
     },
     getPmtTrans (id) {
       if (id < 1) { return }
-      this.$http.get(`/api/party/${id}/payments?offset=${this.pmtOffset}&limit=5`).then((restran) => {
+      this.$http.get(`/api/party/${id}/payments?offset=${this.pmtOffset}&limit=5`, {httpProgress: true}).then((restran) => {
         if (restran.data.length > 0) {
           this.dataPmt = restran.data
         } else if (this.dataPmt.length > 0) {
@@ -276,12 +276,12 @@ export default {
     addEditParty () {
       if (this.txnParty.id > 0) {
         // update party
-        this.$http.put('/api/party', this.txnParty).then((res) => {
+        this.$http.put('/api/party', this.txnParty, {httpProgress: true}).then((res) => {
           alert('Updated successfully!')
         })
       } else {
         // insert party
-        this.$http.post('/api/party', this.txnParty).then((res) => {
+        this.$http.post('/api/party', this.txnParty, {httpProgress: true}).then((res) => {
           alert('Added successfully!')
         })
       }

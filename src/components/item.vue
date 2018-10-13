@@ -181,7 +181,7 @@ export default {
       this.itmOffset = 0
     },
     getItem (id) {
-      this.$http.get(`/api/item/${id}`).then((res) => {
+      this.$http.get(`/api/item/${id}`, {httpProgress: true}).then((res) => {
         this.txnItem = res.data
         this.arrItem.splice(0, this.arrItem.length)
         this.arrItem.push(this.txnItem)
@@ -189,7 +189,7 @@ export default {
     },
     getTrans (id) {
       if (id < 1) { return }
-      this.$http.get(`/api/item/${id}/trans?offset=${this.itmOffset}&limit=10`).then((restran) => {
+      this.$http.get(`/api/item/${id}/trans?offset=${this.itmOffset}&limit=10`, {httpProgress: true}).then((restran) => {
         if (restran.data.length > 0) {
           this.data = restran.data
         } else if (this.data.length > 0) {
@@ -217,12 +217,12 @@ export default {
     addEditItem () {
       if (this.txnItem.id > 0) {
         // update item
-        this.$http.put('/api/item', this.txnItem).then((res) => {
+        this.$http.put('/api/item', this.txnItem, {httpProgress: true}).then((res) => {
           alert('Updated successfully!')
         })
       } else {
         // insert item
-        this.$http.post('/api/item', this.txnItem).then((res) => {
+        this.$http.post('/api/item', this.txnItem, {httpProgress: true}).then((res) => {
           alert('Added successfully!')
         })
       }

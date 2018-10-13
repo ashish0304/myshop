@@ -66,18 +66,24 @@
         </router-view>
       </keep-alive>
     </v-content>
+    <loading :value="$store.state.httpProgress">
+    </loading>
   </v-app>
 </template>
 
 <script>
   import replocn from '@/components/replocn'
+  import loading from '@/components/loading'
   export default {
     name: 'App',
-    data: () => ({
-      tranDate: null
-    }),
+    data () {
+      return {
+        tranDate: null
+      }
+    },
     components: {
-      replocn
+      replocn,
+      loading
     },
     created () {
       this.tranDate = new Date().toJSON().slice(0, 10)

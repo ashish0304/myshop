@@ -140,13 +140,13 @@ export default {
   },
   methods: {
     getLocation () {
-      this.$http.get('/api/location').then((res) => {
+      this.$http.get('/api/location', {httpProgress: true}).then((res) => {
         this.arrLocation = res.data
         this.txnLocation = this.arrLocation[0]
       })
     },
     getInvs () {
-      this.$http.get('/api/inventory').then((res) => {
+      this.$http.get('/api/inventory', {httpProgress: true}).then((res) => {
         this.arrInv = res.data.map(a => a.id)
         this.txnInv = this.arrInv[0]
       })
@@ -157,7 +157,7 @@ export default {
         itm_id: this.txnItem.id,
         description: this.txnItem.description,
         quantity: this.txnQuantity}
-      this.$http.post('/api/inventory', dt).then((res) => {
+      this.$http.post('/api/inventory', dt, {httpProgress: true}).then((res) => {
         if (res.data.length) {
           this.data = res.data
         } else {
@@ -170,23 +170,23 @@ export default {
       // alert(JSON.stringify(this.data))
     },
     deleteInv (i) {
-      this.$http.put('/api/inventory', this.data[i]).then((res) => {
+      this.$http.put('/api/inventory', this.data[i], {httpProgress: true}).then((res) => {
         this.data.splice(i, 1)
       })
     },
     clearStk () {
       if (!confirm('Are you sure, you want')) { return }
-      this.$http.put(`/api/clrstk?lcn_id=${this.txnLocation.id}`).then((res) => {
+      this.$http.put(`/api/clrstk?lcn_id=${this.txnLocation.id}`, {httpProgress: true}).then((res) => {
         alert('Successfully deleted stock from selected location')
       })
     },
     exportInv () {
-      this.$http.put(`/api/expinv?inv_id=${this.txnInv}&lcn_id=${this.txnLocation.id}`).then((res) => {
+      this.$http.put(`/api/expinv?inv_id=${this.txnInv}&lcn_id=${this.txnLocation.id}`, {httpProgress: true}).then((res) => {
         alert('Selected inventory exported Successfully to stock')
       })
     },
     clearInv () {
-      this.$http.put(`/api/clrinv?inv_id=${this.txnInv}&lcn_id=${this.txnLocation.id}`).then((res) => {
+      this.$http.put(`/api/clrinv?inv_id=${this.txnInv}&lcn_id=${this.txnLocation.id}`, {httpProgress: true}).then((res) => {
         this.data.splice(0, this.data.length)
       })
     }

@@ -232,7 +232,7 @@
     },
     methods: {
       getLocation () {
-        this.$http.get('/api/location').then((res) => {
+        this.$http.get('/api/location', {httpProgress: true}).then((res) => {
           this.arrLocation = res.data
           this.fltLocation = this.arrLocation[0]
         })
@@ -243,7 +243,7 @@
         let typ = this.fltType ? this.fltType : ''
         let off = (this.pagination.page - 1) * this.pagination.rowsPerPage
         let lim = this.pagination.rowsPerPage
-        this.$http.get(`/api/rawstran?id=${id}&type=${typ}&lcn=${lcn}&offset=${off}&limit=${lim}`).then((res) => {
+        this.$http.get(`/api/rawstran?id=${id}&type=${typ}&lcn=${lcn}&offset=${off}&limit=${lim}`, {httpProgress: true}).then((res) => {
           this.data = res.data.rows
         })
       },
@@ -252,14 +252,14 @@
         let lcn = this.fltLocation ? this.fltLocation.id : ''
         let typ = this.fltType ? this.fltType : ''
         let lim = this.pagination.rowsPerPage
-        this.$http.get(`/api/rawstran?length=true&id=${id}&type=${typ}&lcn=${lcn}&offset=0&limit=${lim}`).then((res) => {
+        this.$http.get(`/api/rawstran?length=true&id=${id}&type=${typ}&lcn=${lcn}&offset=0&limit=${lim}`, {httpProgress: true}).then((res) => {
           this.data = res.data.rows
           this.totalrows = res.data.len
           this.pagination.page = 1
         })
       },
       updateData () {
-        this.$http.put('/api/rawstran', this.edit).then((res) => {
+        this.$http.put('/api/rawstran', this.edit, {httpProgress: true}).then((res) => {
           this.dialog = false
         })
       }

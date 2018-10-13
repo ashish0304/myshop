@@ -252,13 +252,13 @@ export default {
   created () {
     this.dtFrom = String(this.tranDate)
     this.dtTo = String(this.tranDate)
-    this.$http.get('/api/location').then((res) => {
+    this.$http.get('/api/location', {httpProgress: true}).then((res) => {
       this.arrLocation = res.data
     })
   },
   watch: {
     repLocation () {
-      this.$http.get(`/api/repdateitm?id=${this.repLocation}&dtfr=${(Date.parse(this.dtFrom) / 1000)}&dtto=${(Date.parse(this.dtTo) / 1000) + 86399}`).then((res) => {
+      this.$http.get(`/api/repdateitm?id=${this.repLocation}&dtfr=${(Date.parse(this.dtFrom) / 1000)}&dtto=${(Date.parse(this.dtTo) / 1000) + 86399}`, {httpProgress: true}).then((res) => {
         this.dataCsSale = res.data.cssale
         this.dataCrSale = res.data.crsale
         this.dataCsPurc = res.data.cspurc

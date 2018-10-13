@@ -46,10 +46,10 @@ export default {
   },
   methods: {
     login () {
-      this.$http.post(`/api/login?userid=${this.userid}&password=${this.password}&flag=${this.flag}`).then((res) => {
+      this.$http.post(`/api/login?userid=${this.userid}&password=${this.password}&flag=${this.flag}`, {httpProgress: true}).then((res) => {
         this.$router.push(this.$root.preloginpath)
       }).catch((err) => {
-        alert(err.response.statusText)
+        alert(err.response.data)
       })
     }
   }

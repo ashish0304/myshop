@@ -177,7 +177,7 @@ export default {
       this.trans.chq_date = Date.parse(this.dtCheque) / 1000
       this.trans.comment = this.txnComment
       this.trans.tgt_acc_id = this.txnTgtAcc ? this.txnTgtAcc.id : 0
-      this.$http.post('/api/pmttran', this.trans).then((res) => {
+      this.$http.post('/api/pmttran', this.trans, {httpProgress: true}).then((res) => {
         this.txnPrt = null
         this.arrPrt.splice(0, this.arrPrt.length)
         this.txnTgtAcc = null
@@ -190,18 +190,16 @@ export default {
       })
     },
     getAccount () {
-      this.$http.get('/api/account').then((res) => {
+      this.$http.get('/api/account', {httpProgress: true}).then((res) => {
         this.arrAcc = res.data
         this.txnAcc = this.arrAcc[0]
       })
     },
     getTrans () {
-      this.$http.get('/api/payments?limit=15').then((restran) => {
+      this.$http.get('/api/payments?limit=15', {httpProgress: true}).then((restran) => {
         this.data = restran.data
       })
     }
-  },
-  computed: {
   }
 }
 </script>

@@ -83,8 +83,7 @@ export default {
   },
   methods: {
     getData () {
-      this.$http.get('/api/cheques').then((res) => {
-        // alert(JSON.stringify(res.data))
+      this.$http.get('/api/cheques', {httpProgress: true}).then((res) => {
         this.dataR = res.data.R
         this.dataP = res.data.P
       })
@@ -95,12 +94,13 @@ export default {
     honor (d) {
       if (!confirm('Are you sure?')) { return }
       let dt = Date.parse(this.tranDate + ' ' + new Date().toLocaleTimeString()) / 1000
-      this.$http.put(`/api/chequehonor?date=${dt}`, d).then((res) => {
+      this.$http.put(`/api/chequehonor?date=${dt}`, d, {httpProgress: true}).then((res) => {
         this.getData()
       })
     },
     cancel (d) {
-      this.$http.put('/api/chequecancel', d).then((res) => {
+      if (!confirm('Are you sure to cancel the cheque?')) { return }
+      this.$http.put('/api/chequecancel', d, {httpProgress: true}).then((res) => {
         this.getData()
       })
     }

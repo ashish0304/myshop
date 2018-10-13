@@ -167,6 +167,9 @@
     </v-data-table>
     <v-pagination circle v-model="pagination.page" :length="pages">
     </v-pagination>
+    <v-snackbar v-model="tranInfo">
+      {{ infoText }}
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -193,7 +196,7 @@
         arrTgtLocation: [],
         txnParty: null,
         arrParty: [],
-        ldgParty: false,
+        ldgParyty: false,
         searchParty: null,
         txnItem: null,
         arrItem: [],
@@ -215,7 +218,10 @@
           { text: 'Value', value: 'val', sortable: false }
         ],
         stock: [],
-        tranStock: null
+        accounts: [],
+        tranStock: null,
+        tranInfo: false,
+        infoText: ''
       }
     },
     beforeCreate () {
@@ -282,9 +288,14 @@
         }
       },
       getLocation () {
-        this.$http.get('/api/location').then((res) => {
+        this.$http.get('/api/location', {httpProgress: true}).then((res) => {
           this.arrLocation = res.data
           this.txnLocation = this.arrLocation[0]
+        })
+      },
+      getAccounts () {
+        this.$http.get('/api/account', {httpProgress: true}).then((res) => {
+          this.accounts = res.data
         })
       },
       fillTgtLocation () {
@@ -347,8 +358,7 @@
           stocks: JSON.parse(JSON.stringify(stTran))
         }
         // alert(JSON.stringify(this.tranStock))
-        this.$http.post('/api/stktran', this.tranStock).then((res) => {
-          // alert('Committed successfully')
+        this.$http.post('/api/stktran', this.tranStock, {httpProgress: true}).then((res) => {
           this.txnTgtLocation = null
           this.txnParty = null
           this.txnExpense = 0

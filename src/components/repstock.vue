@@ -85,12 +85,12 @@ export default {
   },
   methods: {
     getLocation () {
-      this.$http.get('/api/location').then((res) => {
+      this.$http.get('/api/location', {httpProgress: true}).then((res) => {
         this.arrLocation = res.data
       })
     },
     getStock () {
-      this.$http.get(`/api/stocks/${this.repLocation}/${this.repTax}`).then((res) => {
+      this.$http.get(`/api/stocks/${this.repLocation}/${this.repTax}`, {httpProgress: true}).then((res) => {
         this.data = res.data
       })
     }

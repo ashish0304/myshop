@@ -67,7 +67,7 @@ export default {
     }
   },
   created () {
-    this.$http.get('/api/partiesbal').then((res) => {
+    this.$http.get('/api/partiesbal', {httpProgress: true}).then((res) => {
       this.dataR = res.data.R
       this.dataP = res.data.P
     })

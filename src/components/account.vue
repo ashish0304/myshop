@@ -123,14 +123,14 @@ export default {
       this.pagination = { page: 1, rows: 15, total: 1 }
     },
     getAccounts () {
-      this.$http.get('/api/account').then((res) => {
+      this.$http.get('/api/account', {httpProgress: true}).then((res) => {
         this.arrAccount = res.data
         this.txnAccount = this.arrAccount[0]
       })
     },
     getTrans () {
       if (this.txnAccount.id < 1) { return }
-      this.$http.get(`/api/acctrans?acc=${this.txnAccount.id}&offset=${(this.pagination.page - 1) * this.pagination.rows}&limit=${this.pagination.rows}`).then((restran) => {
+      this.$http.get(`/api/acctrans?acc=${this.txnAccount.id}&offset=${(this.pagination.page - 1) * this.pagination.rows}&limit=${this.pagination.rows}`, {httpProgress: true}).then((restran) => {
         this.data = restran.data
         if (restran.data.length === this.pagination.rows) {
           this.pagination.total = (this.pagination.page + 2) * this.pagination.rows
@@ -140,12 +140,12 @@ export default {
     addEditAcc () {
       if (this.txnAccount.id) {
         // update account
-        this.$http.put('/api/account', this.txnAccount).then((res) => {
+        this.$http.put('/api/account', this.txnAccount, {httpProgress: true}).then((res) => {
           alert('Updated successfully!')
         })
       } else {
         // insert account
-        this.$http.post('/api/account', this.txnAccount).then((res) => {
+        this.$http.post('/api/account', this.txnAccount, {httpProgress: true}).then((res) => {
           alert('Added successfully!')
         })
       }

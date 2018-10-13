@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+import Vuex from 'vuex'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
 import colors from 'vuetify/es5/util/colors'
@@ -11,7 +12,14 @@ import Axios from 'axios'
 
 Vue.prototype.$http = Axios
 Vue.use(Vuetify)
+Vue.use(Vuex)
 Vue.config.productionTip = false
+
+const store = new Vuex.Store({
+  state: {
+    httpProgress: false
+  }
+})
 
 const theme = {
   primary: colors.green.base,
@@ -25,6 +33,7 @@ const theme = {
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
+  store,
   router,
   template: '<App/>',
   components: { App },
@@ -34,15 +43,29 @@ new Vue({
     }
   },
   beforeCreate: function () {
-    this.$http.interceptors.response.use((res) => { res.preloginpath = this.$route.path; return res }, (err) => {
+    this.$http.interceptors.request.use((config) => {
+      this.$store.state.httpProgress = config.httpProgress
+      return config
+    }, err => {
+      this.$store.state.httpProgress = false
+      return Promise.reject(err)
+    })
+
+    this.$http.interceptors.response.use((res) => {
+      res.preloginpath = this.$route.path
+      this.$store.state.httpProgress = false
+      return res
+    }, err => {
       if (err.response.status === 401) {
         if (this.$route.path !== '/login') {
           this.preloginpath = this.$route.path
         }
         router.replace('/login')
-      } else {
-        alert(err.response.statusText)
       }
+      if (err.response.data) {
+        alert(err.response.data)
+      }
+      this.$store.state.httpProgress = false
       return Promise.reject(err)
     })
   },
