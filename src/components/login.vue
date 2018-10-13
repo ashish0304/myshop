@@ -15,7 +15,7 @@
         <v-text-field
           type="password"
           label="Password"
-          v-model="password"
+.          v-model="password"
           hide-details>
         </v-text-field>
       </v-flex>
@@ -48,8 +48,6 @@ export default {
     login () {
       this.$http.post(`/api/login?userid=${this.userid}&password=${this.password}&flag=${this.flag}`, {httpProgress: true}).then((res) => {
         this.$router.push(this.$root.preloginpath)
-      }).catch((err) => {
-        alert(err.response.data)
       })
     }
   }
