@@ -187,13 +187,8 @@
     },
     methods: {
       getAccount () {
-        this.$http.get('/api/account').then((res) => {
-          this.$store.state.httpProgress = true
+        this.$http.get('/api/account', {httpProgress: true}).then((res) => {
           this.arrAccount = res.data
-        }).catch(err => {
-          alert(err.response.data)
-        }).then(() => {
-          this.$store.state.httpProgress = false
         })
       },
       gotoPage () {
@@ -201,7 +196,7 @@
         let typ = this.fltType ? this.fltType : ''
         let off = (this.pagination.page - 1) * this.pagination.rowsPerPage
         let lim = this.pagination.rowsPerPage
-        this.$http.get(`/api/rawptran?type=${typ}&acc=${acc}&offset=${off}&limit=${lim}`).then((res) => {
+        this.$http.get(`/api/rawptran?type=${typ}&acc=${acc}&offset=${off}&limit=${lim}`, {httpProgress: true}).then((res) => {
           this.data = res.data.rows
         })
       },
@@ -209,25 +204,15 @@
         let acc = this.fltAccount ? this.fltAccount.id : ''
         let typ = this.fltType ? this.fltType : ''
         let lim = this.pagination.rowsPerPage
-        this.$http.get(`/api/rawptran?length=true&type=${typ}&acc=${acc}&offset=0&limit=${lim}`).then((res) => {
-          this.$store.state.httpProgress = true
+        this.$http.get(`/api/rawptran?length=true&type=${typ}&acc=${acc}&offset=0&limit=${lim}`, {httpProgress: true}).then((res) => {
           this.data = res.data.rows
           this.totalrows = res.data.len
           this.pagination.page = 1
-        }).catch(err => {
-          alert(err.response.data)
-        }).then(() => {
-          this.$store.state.httpProgress = false
         })
       },
       updateData () {
-        this.$http.put('/api/rawptran', this.edit).then((res) => {
+        this.$http.put('/api/rawptran', this.edit, {httpProgress: true}).then((res) => {
           this.dialog = false
-          this.$store.state.httpProgress = true
-        }).catch(err => {
-          alert(err.response.data)
-        }).then(() => {
-          this.$store.state.httpProgress = false
         })
       }
     },

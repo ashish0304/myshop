@@ -55,7 +55,8 @@ new Vue({
       res.preloginpath = this.$route.path
       this.$store.state.httpProgress = false
       return res
-    }, err => {
+    }, (err) => {
+      this.$store.state.httpProgress = false
       if (err.response.status === 401) {
         if (this.$route.path !== '/login') {
           this.preloginpath = this.$route.path
@@ -64,8 +65,9 @@ new Vue({
       }
       if (err.response.data) {
         alert(err.response.data)
+      } else {
+        alert(err.response.statusText)
       }
-      this.$store.state.httpProgress = false
       return Promise.reject(err)
     })
   },

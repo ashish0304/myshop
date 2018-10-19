@@ -42,7 +42,7 @@
         <v-select
               :items="arrTgtLocation"
               v-model="txnTgtLocation"
-              label="Tgt. Location"
+              label="Source Location"
               item-text="description"
               item-value="id"
               placeholder="Location"
@@ -167,7 +167,7 @@
     </v-data-table>
     <v-pagination circle v-model="pagination.page" :length="pages">
     </v-pagination>
-    <v-snackbar v-model="tranInfo">
+    <v-snackbar v-model="tranInfo" bottom>
       {{ infoText }}
     </v-snackbar>
   </v-container>
@@ -252,6 +252,9 @@
       txnParty: function () {
         if (!this.txnParty) {
           this.arrParty.splice(0, this.arrParty.length)
+        } else {
+          this.tranInfo = true
+          this.infoText = `${this.txnParty.description}, Balance: ${this.txnParty.balance.toFixed(2)}`
         }
       },
       txnItem: function () {
@@ -293,11 +296,11 @@
           this.txnLocation = this.arrLocation[0]
         })
       },
-      getAccounts () {
+      /* getAccounts () {
         this.$http.get('/api/account', {httpProgress: true}).then((res) => {
           this.accounts = res.data
         })
-      },
+      }, */
       fillTgtLocation () {
         this.arrTgtLocation = this.arrLocation.slice(0)
         let ind = this.arrTgtLocation.findIndex(x => x.id === this.txnLocation.id)
@@ -358,17 +361,20 @@
           stocks: JSON.parse(JSON.stringify(stTran))
         }
         // alert(JSON.stringify(this.tranStock))
-        this.$http.post('/api/stktran', this.tranStock, {httpProgress: true}).then((res) => {
-          this.txnTgtLocation = null
-          this.txnParty = null
-          this.txnExpense = 0
-          this.txnPrtExp = 0
-          this.flgCost = false
-          this.flgMerge = false
-          this.flgTotal = false
-          this.stock.splice(0, this.stock.length)
-          this.tranStock.stocks = null
-          this.tranStock = null
+        this.$http.get('/api/account', {httpProgress: true}).then((acs) => {
+          this.accounts = acs.data
+          this.$http.post('/api/stktran', this.tranStock, {httpProgress: true}).then((res) => {
+            this.txnTgtLocation = null
+            this.txnParty = null
+            this.txnExpense = 0
+            this.txnPrtExp = 0
+            this.flgCost = false
+            this.flgMerge = false
+            this.flgTotal = false
+            this.stock.splice(0, this.stock.length)
+            this.tranStock.stocks = null
+            this.tranStock = null
+          })
         })
       }
     },

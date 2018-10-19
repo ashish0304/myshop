@@ -15,7 +15,7 @@
         <v-text-field
           type="password"
           label="Password"
-.          v-model="password"
+          v-model="password"
           hide-details>
         </v-text-field>
       </v-flex>
