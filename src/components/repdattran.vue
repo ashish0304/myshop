@@ -166,6 +166,7 @@
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.date | toDate }}</td>
         <td class="text-xs-left">{{ props.item.type }}
+          <router-link :to="'/account/'+props.item.acc_id">{{ props.item.account }}</router-link>
           <router-link :to="'/party/'+props.item.prt_id">{{ props.item.party }}</router-link>
           {{ props.item.comment }}
         </td>
@@ -191,6 +192,7 @@
       <template slot="items" slot-scope="props">
         <td class="text-xs-left">{{ props.item.date | toDate }}</td>
         <td class="text-xs-left">{{ props.item.type }}
+          <router-link :to="'/account/'+props.item.acc_id">{{ props.item.account }}</router-link>
           <router-link :to="'/party/'+props.item.prt_id">{{ props.item.party }}</router-link>
           {{ props.item.comment }}
         </td>
