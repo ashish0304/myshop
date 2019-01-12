@@ -56,7 +56,6 @@ export default {
     }
   },
   created () {
-    // alert(this.tranDate)
     this.repMonth = this.tranDate.substring(0, 7)
     this.$http.get('/api/location', {httpProgress: true}).then((res) => {
       this.arrLocation = res.data
@@ -65,7 +64,6 @@ export default {
   },
   watch: {
     repMonth () {
-      // alert(this.tranDate)
       if (this.repMonth.length !== 7) {
         this.repMonth = this.tranDate.substring(0, 7)
       } else {

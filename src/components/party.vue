@@ -124,7 +124,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 export default {
   name: 'party',
   props: {
@@ -213,7 +212,6 @@ export default {
     },
     getParty (id) {
       this.$http.get(`/api/party/${id}`, {httpProgress: true}).then((res) => {
-        // alert(JSON.stringify(res.data))
         this.txnParty = res.data
         this.arrParty.splice(0, this.arrParty.length)
         this.arrParty.push(this.txnParty)

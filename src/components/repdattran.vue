@@ -31,7 +31,7 @@
         <td class="text-xs-left">{{ props.item.date | toDate }}</td>
         <td class="text-xs-left"><router-link :to="'/item/'+props.item.itm_id">{{ props.item.description }}</router-link></td>
         <td class="text-xs-right">{{ props.item.quantity }}</td>
-        <td class="text-xs-right">{{ props.item.rate | toAount }}</td>
+        <td class="text-xs-right">{{ props.item.rate | toAmount }}</td>
         <td class="text-xs-right">{{ props.item.quantity * props.item.rate | toAmount }}</td>
       </template>
       <template slot="footer">

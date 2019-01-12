@@ -218,7 +218,6 @@
           { text: 'Value', value: 'val', sortable: false }
         ],
         stock: [],
-        accounts: [],
         tranStock: null,
         tranInfo: false,
         infoText: ''
@@ -296,11 +295,6 @@
           this.txnLocation = this.arrLocation[0]
         })
       },
-      /* getAccounts () {
-        this.$http.get('/api/account', {httpProgress: true}).then((res) => {
-          this.accounts = res.data
-        })
-      }, */
       fillTgtLocation () {
         this.arrTgtLocation = this.arrLocation.slice(0)
         let ind = this.arrTgtLocation.findIndex(x => x.id === this.txnLocation.id)
@@ -331,7 +325,6 @@
         this.txnItem = null
         this.txnQuantity = null
         this.txnRate = null
-        // alert(JSON.stringify(this.stock))
       },
       submitTrans () {
         if (!confirm('Are you sure?')) { return }
@@ -360,21 +353,17 @@
           flg_total: this.flgTotal,
           stocks: JSON.parse(JSON.stringify(stTran))
         }
-        // alert(JSON.stringify(this.tranStock))
-        this.$http.get('/api/account', {httpProgress: true}).then((acs) => {
-          this.accounts = acs.data
-          this.$http.post('/api/stktran', this.tranStock, {httpProgress: true}).then((res) => {
-            this.txnTgtLocation = null
-            this.txnParty = null
-            this.txnExpense = 0
-            this.txnPrtExp = 0
-            this.flgCost = false
-            this.flgMerge = false
-            this.flgTotal = false
-            this.stock.splice(0, this.stock.length)
-            this.tranStock.stocks = null
-            this.tranStock = null
-          })
+        this.$http.post('/api/stktran', this.tranStock, {httpProgress: true}).then((res) => {
+          this.txnTgtLocation = null
+          this.txnParty = null
+          this.txnExpense = 0
+          this.txnPrtExp = 0
+          this.flgCost = false
+          this.flgMerge = false
+          this.flgTotal = false
+          this.stock.splice(0, this.stock.length)
+          this.tranStock.stocks = null
+          this.tranStock = null
         })
       }
     },

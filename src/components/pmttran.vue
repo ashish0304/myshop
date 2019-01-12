@@ -102,7 +102,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 export default {
   name: 'pmttran',
   props: {
@@ -114,7 +113,6 @@ export default {
       arrType: [
         {text: 'Sale', value: 'S'},
         {text: 'Purchase', value: 'P'},
-        // {text: 'Bus/Transport', value: 'B'},
         {text: 'Wages/Rent', value: 'W'},
         {text: 'Transfer/Deposit', value: 'T'},
         {text: 'Service Charges', value: 'C'},

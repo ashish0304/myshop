@@ -85,7 +85,6 @@
 </template>
 
 <script>
-// import axios from 'axios'
 export default {
   name: 'inventory',
   data () {
@@ -113,9 +112,7 @@ export default {
   },
   watch: {
     txnInv () {
-      // alert(this.txnInv)
       this.$http.get(`/api/inventory?inv_id=${this.txnInv}&lcn_id=${this.txnLocation.id}`).then((res) => {
-        // alert(JSON.stringify(res.data))
         this.data = res.data
       })
     },
@@ -167,7 +164,6 @@ export default {
         this.arrItem = []
         this.txnQuantity = 0
       })
-      // alert(JSON.stringify(this.data))
     },
     deleteInv (i) {
       this.$http.put('/api/inventory', this.data[i], {httpProgress: true}).then((res) => {

@@ -73,6 +73,7 @@ new Vue({
   },
   created () {
     this.$vuetify.theme = theme
+    this.$http.defaults.timeout = 10000
   }
 })
 

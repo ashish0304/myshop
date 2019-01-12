@@ -105,7 +105,6 @@ export default {
       this.getTrans(this.txnAccount.id)
     },
     'txnAccount.id' () {
-      // alert(this.txnAccount)
       if (!this.txnAccount || this.txnAccount.id === 0) {
         this.initBlank()
         return
