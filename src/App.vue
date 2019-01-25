@@ -52,6 +52,9 @@
           <v-list-tile to="/inventory">
             Inventory
           </v-list-tile>
+          <v-list-tile @click.native="getlog">
+            Save Log
+          </v-list-tile>
           <v-list-tile @click.native="logout">
             Logout
           </v-list-tile>
@@ -96,6 +99,17 @@
       }
     },
     methods: {
+      getlog () {
+        this.$http.get('/api/log', {httpProgress: true}).then((response) => {
+          let url = window.URL.createObjectURL(new Blob([response.data]))
+          let link = document.createElement('a')
+          link.href = url
+          link.setAttribute('download', 'log.txt')
+          document.body.appendChild(link)
+          link.click()
+          link.parentNode.removeChild(link)
+        })
+      },
       logout () {
         this.$http.get('/api/logout')
       }

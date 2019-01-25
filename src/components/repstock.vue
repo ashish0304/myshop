@@ -40,10 +40,17 @@
     </v-data-table>
     <v-pagination v-model="pagination.page" :length="pages" circle>
     </v-pagination>
+    <v-layout row wrap>
+      <v-flex>
+        <v-btn color="primary" v-on:click.native="exportData" small block>Save As XL Sheet
+        </v-btn>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
 <script>
+import XLSX from 'xlsx'
 export default {
   name: 'repstock',
   data () {
@@ -67,7 +74,7 @@ export default {
         { text: 'Cost', value: 'cost', sortable: false },
         { text: 'Value', value: 'val', sortable: false }
       ],
-      pagination: { rowsPerPage: 15 }
+      pagination: { rowsPerPage: 20 }
     }
   },
   created () {
@@ -92,6 +99,12 @@ export default {
       this.$http.get(`/api/stocks/${this.repLocation}/${this.repTax}`, {httpProgress: true}).then((res) => {
         this.data = res.data
       })
+    },
+    exportData () {
+      let wsStock = XLSX.utils.json_to_sheet(this.data)
+      let wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, wsStock, 'Stock')
+      XLSX.writeFile(wb, 'stock.xlsx')
     }
   },
   computed: {
