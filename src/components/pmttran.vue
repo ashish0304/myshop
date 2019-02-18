@@ -171,7 +171,7 @@ export default {
       this.trans.date = Date.parse(this.tranDate + ' ' + new Date().toLocaleTimeString()) / 1000
       this.trans.prt_id = this.txnPrt ? this.txnPrt.id : 0
       this.trans.acc_id = this.txnAcc.id
-      this.trans.amount = parseInt(this.txnAmount)
+      this.trans.amount = this.txnAmount
       this.trans.chq_date = Date.parse(this.dtCheque) / 1000
       this.trans.comment = this.txnComment
       this.trans.tgt_acc_id = this.txnTgtAcc ? this.txnTgtAcc.id : 0
