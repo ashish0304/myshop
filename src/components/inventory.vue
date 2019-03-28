@@ -2,13 +2,13 @@
   <v-container class="ma-0 pa-0" fluid>
     <v-layout fluid>
       <v-flex>
-        <v-btn @click.native="clearStk" small primary block>Clear Stock</v-btn>
+        <v-btn @click.native="clearStk" small color="primary" block>Clear Stock</v-btn>
       </v-flex>
       <v-flex>
-        <v-btn @click.native="exportInv"small primary block>Export Inventory</v-btn>
+        <v-btn @click.native="exportInv"small color="primary" block>Export Inventory</v-btn>
       </v-flex>
       <v-flex>
-        <v-btn @click.native="clearInv" small primary block>Clear Inventory</v-btn>
+        <v-btn @click.native="clearInv" small color="primary" block>Clear Inventory</v-btn>
       </v-flex>
     </v-layout fluid>
     <v-layout fluid>
@@ -90,7 +90,7 @@ export default {
   data () {
     return {
       arrInv: [],
-      txnInv: null,
+      txnInv: {},
       arrLocation: [],
       txnLocation: null,
       arrItem: [],

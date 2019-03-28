@@ -36,8 +36,8 @@
       <v-flex xs12>
         <v-btn
           v-on:click.native="addEditAcc"
-          :disabled="txnAccount.description.length<4"
-          primary small block>
+          :disabled="!txnAccount.description || txnAccount.description.length<4"
+          color="primary" small block>
           {{ txnAccount.id?"Save":"Add" }}
         </v-btn>
       </v-flex>
@@ -45,6 +45,7 @@
     <v-data-table
       :headers="head"
       :items="data"
+      :pagination.sync="pagination"
       hide-actions
       class="elevation-1" >
       <template slot="items" slot-scope="props">
@@ -71,9 +72,9 @@ export default {
     return {
       arrAccount: [],
       txnAccount: {
-        id: 0,
-        description: '',
-        balance: 0
+        id: null,
+        description: null,
+        balance: null
       },
       head: [
         { text: 'Date', value: 'date', sortable: false, align: 'left' },
@@ -81,7 +82,7 @@ export default {
         { text: 'Amount', value: 'amount', sortable: false, align: 'right' }
       ],
       data: [],
-      pagination: { page: 1, rows: 15, total: 0 }
+      pagination: { rowsPerPage: 25 }
     }
   },
   created: function () {
@@ -115,11 +116,10 @@ export default {
   methods: {
     initBlank () {
       this.txnAccount = {}
-      this.$set(this.txnAccount, 'id', 0)
-      this.$set(this.txnAccount, 'description', '')
-      this.$set(this.txnAccount, 'balance', 0)
+      this.$set(this.txnAccount, 'id', null)
+      this.$set(this.txnAccount, 'description', null)
+      this.$set(this.txnAccount, 'balance', null)
       this.data.splice(0, this.data.length)
-      this.pagination = { page: 1, rows: 15, total: 1 }
     },
     getAccounts () {
       this.$http.get('/api/account', {httpProgress: true}).then((res) => {
@@ -129,11 +129,8 @@ export default {
     },
     getTrans () {
       if (this.txnAccount.id < 1) { return }
-      this.$http.get(`/api/acctrans?acc=${this.txnAccount.id}&offset=${(this.pagination.page - 1) * this.pagination.rows}&limit=${this.pagination.rows}`, {httpProgress: true}).then((restran) => {
-        this.data = restran.data
-        if (restran.data.length === this.pagination.rows) {
-          this.pagination.total = (this.pagination.page + 2) * this.pagination.rows
-        }
+      this.$http.get(`/api/acctrans?acc=${this.txnAccount.id}`, {httpProgress: true}).then((res) => {
+        this.data = res.data
       })
     },
     addEditAcc () {
@@ -152,7 +149,7 @@ export default {
   },
   computed: {
     pages () {
-      return Math.ceil(this.pagination.total / this.pagination.rows)
+      return this.pagination.rowsPerPage ? Math.ceil(this.data.length / this.pagination.rowsPerPage) : 0
     }
   }
 }

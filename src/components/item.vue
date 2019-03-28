@@ -72,15 +72,16 @@
       <v-flex xs12>
         <v-btn
           v-on:click.native="addEditItem"
-          :disabled="txnItem.description.length<5"
-          primary small block>
+          :disabled="!txnItem.description || txnItem.description.length<5"
+          color="primary" small block>
           {{ txnItem.id?"Save":"Add" }}
         </v-btn>
       </v-flex>
     </v-layout>
-    <v-data-table
+    <v-data-table v-if="data.length>0"
       :headers="head"
       :items="data"
+      :pagination.sync="pagination"
       hide-actions
       class="elevation-1" >
       <template slot="items" slot-scope="props">
@@ -91,17 +92,8 @@
         <td class="text-xs-right">{{ props.item.quantity * props.item.rate | toAmount }}</td>
       </template>
     </v-data-table>
-    <v-layout row wrap>
-      <v-btn v-on:click.native="firstItem" small fab>
-        <v-icon>first_page</v-icon>
-      </v-btn>
-      <v-btn v-on:click.native="prevItem" small fab>
-        <v-icon>navigate_before</v-icon>
-      </v-btn>
-      <v-btn v-on:click.native="nextItem" small fab>
-        <v-icon>navigate_next</v-icon>
-      </v-btn>
-    </v-layout>
+    <v-pagination v-model="pagination.page" :length="pages" v-if="data.length>0" circle>
+    </v-pagination>
   </v-container>
 </template>
 
@@ -115,12 +107,12 @@ export default {
     return {
       arrItem: [],
       txnItem: {
-        id: 0,
-        description: '',
-        hsn: '',
-        tax: 0,
-        cost: 0,
-        price: 0
+        id: null,
+        description: null,
+        hsn: null,
+        tax: null,
+        cost: null,
+        price: null
       },
       head: [
         { text: 'Type', value: 'type', sortable: false, align: 'left' },
@@ -131,7 +123,7 @@ export default {
       ],
       ldgItem: false,
       data: [],
-      itmOffset: 0,
+      pagination: { rowsPerPage: 25 },
       searchItem: null
     }
   },
@@ -171,14 +163,13 @@ export default {
   methods: {
     initBlank () {
       this.txnItem = {}
-      this.$set(this.txnItem, 'id', 0)
-      this.$set(this.txnItem, 'description', '')
-      this.$set(this.txnItem, 'hsn', '')
-      this.$set(this.txnItem, 'tax', 0)
-      this.$set(this.txnItem, 'cost', 0)
-      this.$set(this.txnItem, 'price', 0)
+      this.$set(this.txnItem, 'id', null)
+      this.$set(this.txnItem, 'description', null)
+      this.$set(this.txnItem, 'hsn', null)
+      this.$set(this.txnItem, 'tax', null)
+      this.$set(this.txnItem, 'cost', null)
+      this.$set(this.txnItem, 'price', null)
       this.data.splice(0, this.data.length)
-      this.itmOffset = 0
     },
     getItem (id) {
       this.$http.get(`/api/item/${id}`, {httpProgress: true}).then((res) => {
@@ -189,30 +180,9 @@ export default {
     },
     getTrans (id) {
       if (id < 1) { return }
-      this.$http.get(`/api/item/${id}/trans?offset=${this.itmOffset}&limit=10`, {httpProgress: true}).then((restran) => {
-        if (restran.data.length > 0) {
-          this.data = restran.data
-        } else if (this.data.length > 0) {
-          this.itmOffset -= 10
-          alert('No more transaction!')
-        } else {
-          alert('No transaction!')
-        }
+      this.$http.get(`/api/item/${id}/trans`, {httpProgress: true}).then((res) => {
+        this.data = res.data
       })
-    },
-    firstItem () {
-      if (this.itmOffset === 0) { return }
-      this.itmOffset = 0
-      this.getTrans(this.txnItem.id)
-    },
-    prevItem () {
-      if (this.itmOffset < 10) { return }
-      this.itmOffset -= 10
-      this.getTrans(this.txnItem.id)
-    },
-    nextItem () {
-      this.itmOffset += 10
-      this.getTrans(this.txnItem.id)
     },
     addEditItem () {
       if (this.txnItem.id > 0) {
@@ -226,6 +196,11 @@ export default {
           alert('Added successfully!')
         })
       }
+    }
+  },
+  computed: {
+    pages () {
+      return this.pagination.rowsPerPage ? Math.ceil(this.data.length / this.pagination.rowsPerPage) : 0
     }
   }
 }

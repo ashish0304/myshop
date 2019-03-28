@@ -43,12 +43,6 @@
           <v-list-tile to="/party">
             Party Details
           </v-list-tile>
-          <v-list-tile to="/editstran">
-            Edit Stktran
-          </v-list-tile>
-          <v-list-tile to="/editptran">
-            Edit Pmttran
-          </v-list-tile>
           <v-list-tile to="/inventory">
             Inventory
           </v-list-tile>

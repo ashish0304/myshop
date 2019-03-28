@@ -62,8 +62,8 @@ export default {
         { text: 'Party', value: 'description', sortable: false, align: 'left' },
         { text: 'Balance', value: 'balance', sortable: false, align: 'right' }
       ],
-      paginationR: { rowsPerPage: 10 },
-      paginationP: { rowsPerPage: 10 }
+      paginationR: { rowsPerPage: 15 },
+      paginationP: { rowsPerPage: 15 }
     }
   },
   created () {

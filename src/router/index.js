@@ -11,8 +11,6 @@ import repprtbal from '@/components/repprtbal'
 import repdattran from '@/components/repdattran'
 import replocn from '@/components/replocn'
 import account from '@/components/account'
-import editstran from '@/components/editstran'
-import editptran from '@/components/editptran'
 import cheques from '@/components/cheques'
 
 Vue.use(Router)
@@ -47,16 +45,6 @@ export default new Router({
       name: 'party',
       component: party,
       props: true
-    },
-    {
-      path: '/editstran',
-      name: 'editstran',
-      component: editstran
-    },
-    {
-      path: '/editptran',
-      name: 'editptran',
-      component: editptran
     },
     {
       path: '/inventory',

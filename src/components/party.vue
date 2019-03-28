@@ -66,72 +66,76 @@
       <v-flex xs12>
         <v-btn
           v-on:click.native="addEditParty"
-          :disabled="txnParty.description.length<5"
+          :disabled="!txnParty.description || txnParty.description.length<5"
           color="primary" small block>
           {{ txnParty.id?"Save":"Add" }}
         </v-btn>
       </v-flex>
     </v-layout>
-    <v-data-table
-      :headers="headItm"
-      :items="dataItm"
+    <v-data-table v-if="dataSumry.length>0"
+      :headers="headSumry"
+      :items="dataSumry"
+      item-key="id"
+      :pagination.sync="pagSumry"
+      :expand="expand"
       hide-actions
       class="elevation-1" >
-      <template slot="items" slot-scope="props">
-        <td class="text-xs-left">{{ props.item.type }}</td>
-        <td class="text-xs-left">{{ props.item.date | toDate }}</td>
-        <td class="text-xs-left">{{ props.item.item }}</td>
-        <td class="text-xs-right">{{ props.item.quantity }}</td>
-        <td class="text-xs-right">{{ props.item.rate | toAmount }}</td>
-        <td class="text-xs-right">{{ props.item.quantity * props.item.rate | toAmount }}</td>
+      <template v-slot:items="props">
+        <tr @click="props.expanded=!props.expanded;getItmTrans(props.item.type, props.item.date, props.item.lcn_id)">
+          <td class="text-xs-left">{{ props.item.locn }}</td>
+          <td class="text-xs-left">{{ props.item.type }}</td>
+          <td class="text-xs-left">{{ props.item.date | toDate }}</td>
+          <td class="text-xs-right">{{ props.item.amount | toAmount }}</td>
+        </tr>
+      </template>
+      <template v-slot:expand="props">
+        <v-card class="elevation-10">
+          <v-card-text>
+            <v-data-table
+              :headers="headItm"
+              :items="dataItm"
+              hide-actions
+              class="elevation-10">
+              <template v-slot:items="props">
+                <td class="text-xs-left">{{ props.item.description }}</td>
+                <td class="text-xs-right">{{ props.item.quantity }}</td>
+                <td class="text-xs-right">{{ props.item.rate | toAmount }}</td>
+                <td class="text-xs-right">{{ props.item.quantity * props.item.rate | toAmount }}</td>
+              </template>
+            </v-data-table>
+          </v-card-text>
+        </v-card>
       </template>
     </v-data-table>
-    <v-layout row wrap>
-      <v-btn v-on:click.native="firstItem" small fab>
-        <v-icon>first_page</v-icon>
-      </v-btn>
-      <v-btn v-on:click.native="prevItem" small fab>
-        <v-icon>navigate_before</v-icon>
-      </v-btn>
-      <v-btn v-on:click.native="nextItem" small fab>
-        <v-icon>navigate_next</v-icon>
-      </v-btn>
-    </v-layout>
-    <v-data-table
-      :headers="headPmt"
-      :items="dataPmt"
-      hide-actions
-      class="elevation-1" >
-      <template slot="items" slot-scope="props">
-        <td class="text-xs-left">{{ props.item.type }}</td>
-        <td class="text-xs-left">{{ props.item.date | toDate }}</td>
-        <td class="text-xs-left">{{ props.item.account }}</td>
-        <td class="text-xs-right">{{ props.item.amount | toAmount }}</td>
-      </template>
-    </v-data-table>
-    <v-layout row wrap>
-      <v-btn v-on:click.native="firstPay" small fab>
-        <v-icon>first_page</v-icon>
-      </v-btn>
-      <v-btn v-on:click.native="prevPay" small fab>
-        <v-icon>navigate_before</v-icon>
-      </v-btn>
-      <v-btn v-on:click.native="nextPay" small fab>
-        <v-icon>navigate_next</v-icon>
-      </v-btn>
-    </v-layout>
+    <v-pagination v-model="pagSumry.page" :length="sumryPages" v-if="dataSumry.length>0" circle>
+    </v-pagination>
+    <v-data-table v-if="dataPmt.length>0"
+      :headers="headPmt"
+      :items="dataPmt"
+      :pagination.sync="pagPmt"
+      hide-actions
+      class="elevation-1" >
+      <template slot="items" slot-scope="props">
+        <td class="text-xs-left">{{ props.item.type }}</td>
+        <td class="text-xs-left">{{ props.item.date | toDate }}</td>
+        <td class="text-xs-left">{{ props.item.account }}</td>
+        <td class="text-xs-right">{{ props.item.amount | toAmount }}</td>
+      </template>
+    </v-data-table>
+    <v-pagination v-model="pagPmt.page" :length="pmtPages" v-if="dataPmt.length>0" circle>
+    </v-pagination>
     <v-layout v-show="txnParty.id" row wrap>
-      <v-flex xs4>
-        <v-text-field type="date" label="From" v-model="dtFrom" hide-details/>
-      </v-flex>
-      <v-flex xs4>
-        <v-text-field type="date" label="To" v-model="dtTo" hide-details/>
-      </v-flex>
-      <v-flex xs4>
-        <v-btn @click.native="saveData" color="primary" small top>Save As XL Sheet
-        </v-btn>
-      </v-flex>
-    </v-layout>
+      <v-flex xs4>
+        <v-text-field type="date" label="From" v-model="dtFrom" hide-details/>
+      </v-flex>
+      <v-flex xs4>
+        <v-text-field type="date" label="To" v-model="dtTo" hide-details/>
+      </v-flex>
+      <v-flex xs4>
+        <v-btn @click.native="saveData" color="primary" small top>Save As XL Sheet
+        </v-btn>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
@@ -146,19 +150,23 @@ export default {
     return {
       arrParty: [],
       txnParty: {
-        id: '',
-        description: '',
-        address: '',
-        gstn: '',
-        balance: '',
-        chq_amt: ''
+        id: null,
+        description: null,
+        address: null,
+        gstn: null,
+        balance: null,
+        chq_amt: null
       },
       ldgParty: false,
-      headItm: [
+      headSumry: [
+        { text: 'Location', value: 'locn', sortable: false, align: 'left' },
         { text: 'Type', value: 'type', sortable: false, align: 'left' },
         { text: 'Date', value: 'date', sortable: false, align: 'left' },
-        { text: 'Item', value: 'item', sortable: false, align: 'left' },
-        { text: 'Qty', value: 'qty', sortable: false, align: 'right' },
+        { text: 'Amount', value: 'amount', sortable: false, align: 'right' }
+      ],
+      headItm: [
+        { text: 'Description', value: 'description', sortable: false, align: 'left' },
+        { text: 'Qty', value: 'quantity', sortable: false, align: 'right' },
         { text: 'Rate', value: 'rate', sortable: false, align: 'right' },
         { text: 'Total', value: 'total', sortable: false, align: 'right' }
       ],
@@ -168,12 +176,12 @@ export default {
         { text: 'Account', value: 'account', sortable: false, align: 'left' },
         { text: 'Amount', value: 'amount', sortable: false, align: 'right' }
       ],
+      expand: false,
+      dataSumry: [],
       dataItm: [],
-      itmOffset: 0,
-      itmRows: 10,
       dataPmt: [],
-      pmtOffset: 0,
-      pmtRows: 5,
+      pagSumry: { rowsPerPage: 10 },
+      pagPmt: { rowsPerPage: 5 },
       searchParty: null,
       dtFrom: '',
       dtTo: ''
@@ -190,7 +198,7 @@ export default {
     '$route.params.partyID': function () {
       if (this.partyID) {
         this.getParty(this.partyID)
-        this.getTrans(this.partyID)
+        this.getPartySumry(this.partyID)
       } else {
         this.initBlank()
       }
@@ -201,8 +209,7 @@ export default {
         this.arrParty.splice(0, this.arrParty.length)
         return
       }
-      this.getItmTrans(this.txnParty.id)
-      this.getPmtTrans(this.txnParty.id)
+      this.getPartySumry(this.txnParty.id)
     },
     searchParty (val) {
       if (this.arrParty.length > 0) { return }
@@ -216,16 +223,14 @@ export default {
   methods: {
     initBlank () {
       this.txnParty = {}
-      this.$set(this.txnParty, 'id', 0)
-      this.$set(this.txnParty, 'description', '')
-      this.$set(this.txnParty, 'address', '')
-      this.$set(this.txnParty, 'gstn', '')
-      this.$set(this.txnParty, 'balance', 0)
-      this.$set(this.txnParty, 'chq_amt', 0)
-      this.dataItm.splice(0, this.dataItm.length)
+      this.$set(this.txnParty, 'id', null)
+      this.$set(this.txnParty, 'description', null)
+      this.$set(this.txnParty, 'address', null)
+      this.$set(this.txnParty, 'gstn', null)
+      this.$set(this.txnParty, 'balance', null)
+      this.$set(this.txnParty, 'chq_amt', null)
+      this.dataSumry.splice(0, this.dataSumry.length)
       this.dataPmt.splice(0, this.dataPmt.length)
-      this.itmOffset = 0
-      this.pmtOffset = 0
     },
     getParty (id) {
       this.$http.get(`/api/party/${id}`, {httpProgress: true}).then((res) => {
@@ -234,44 +239,19 @@ export default {
         this.arrParty.push(this.txnParty)
       })
     },
-    getItmTrans (id) {
+    getPartySumry (id) {
       if (id < 1) { return }
-      this.$http.get(`/api/party/${id}/items?offset=${this.itmOffset}&limit=${this.itmRows}`, {httpProgress: true}).then((restran) => {
-        if (restran.data.length > 0) {
-          this.dataItm = restran.data
-        } else if (this.dataItm.length > 0) {
-          this.itmOffset -= this.itmRows
-          alert('No more transaction!')
-        } else {
-          alert('No transaction!')
-        }
+      this.$http.get(`/api/party/${id}/summary`, {httpProgress: true}).then((res) => {
+        this.dataSumry = res.data
+      })
+      this.$http.get(`/api/party/${id}/payments`, {httpProgress: true}).then((res) => {
+        this.dataPmt = res.data
       })
     },
-    firstItem () {
-      if (this.itmOffset === 0) { return }
-      this.itmOffset = 0
-      this.getItmTrans(this.txnParty.id)
-    },
-    prevItem () {
-      if (this.itmOffset < this.itmRows) { return }
-      this.itmOffset -= this.itmRows
-      this.getItmTrans(this.txnParty.id)
-    },
-    nextItem () {
-      this.itmOffset += this.itmRows
-      this.getItmTrans(this.txnParty.id)
-    },
-    getPmtTrans (id) {
-      if (id < 1) { return }
-      this.$http.get(`/api/party/${id}/payments?offset=${this.pmtOffset}&limit=${this.pmtRows}`, {httpProgress: true}).then((restran) => {
-        if (restran.data.length > 0) {
-          this.dataPmt = restran.data
-        } else if (this.dataPmt.length > 0) {
-          this.pmtOffset -= this.pmtRows
-          alert('No more transaction!')
-        } else {
-          alert('No transaction!')
-        }
+    getItmTrans (type, date, lcn) {
+      if (!lcn) { return }
+      this.$http.get(`/api/party/${this.txnParty.id}/items?type=${type}&date=${date}&locn=${lcn}`, {httpProgress: true}).then((res) => {
+        this.dataItm = res.data
       })
     },
     saveData () {
@@ -284,7 +264,7 @@ export default {
         for (let sl of res.data.sale) {
           jsnSale.push({
             Date: new Date(sl.date * 1000).toLocaleDateString(),
-            Description: sl.item,
+            Description: sl.description,
             Quantity: Number(sl.quantity),
             Rate: Number(sl.rate),
             Amount: Number(sl.quantity * sl.rate)
@@ -293,7 +273,7 @@ export default {
         for (let pr of res.data.purchase) {
           jsnPurchase.push({
             Date: new Date(pr.date * 1000).toLocaleDateString(),
-            Description: pr.item,
+            Description: pr.description,
             Quantity: Number(pr.quantity),
             Rate: Number(pr.rate),
             Amount: Number(pr.quantity * pr.rate)
@@ -310,20 +290,6 @@ export default {
         XLSX.writeFile(wb, this.txnParty.description + '-' + this.dtFrom + ' to ' + this.dtTo + '.xlsx')
       })
     },
-    firstPay () {
-      if (this.pmtOffset === 0) { return }
-      this.pmtOffset = 0
-      this.getPmtTrans(this.txnParty.id)
-    },
-    prevPay () {
-      if (this.itmOffset < this.pmtRows) { return }
-      this.pmtOffset -= this.pmtRows
-      this.getPmtTrans(this.txnParty.id)
-    },
-    nextPay () {
-      this.pmtOffset += this.pmtRows
-      this.getPmtTrans(this.txnParty.id)
-    },
     addEditParty () {
       if (this.txnParty.id > 0) {
         // update party
@@ -336,6 +302,14 @@ export default {
           alert('Added successfully!')
         })
       }
+    }
+  },
+  computed: {
+    sumryPages () {
+      return this.pagSumry.rowsPerPage ? Math.ceil(this.dataSumry.length / this.pagSumry.rowsPerPage) : 0
+    },
+    pmtPages () {
+      return this.pagPmt.rowsPerPage ? Math.ceil(this.dataPmt.length / this.pagPmt.rowsPerPage) : 0
     }
   }
 }

@@ -74,7 +74,7 @@ export default {
         { text: 'Cost', value: 'cost', sortable: false },
         { text: 'Value', value: 'val', sortable: false }
       ],
-      pagination: { rowsPerPage: 20 }
+      pagination: { rowsPerPage: 25 }
     }
   },
   created () {

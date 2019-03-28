@@ -58,7 +58,7 @@
               hide-details>
         </v-text-field>
       </v-flex>
-      <v-flex v-show="txnType=='P'">
+      <v-flex v-show="(txnType=='S' || txnType=='P') && txnParty && txnParty.id>0">
         <v-text-field
               type="number"
               v-model.number="txnPrtExp"
@@ -181,8 +181,7 @@
     },
     data () {
       return {
-        tranDate: '',
-        pagination: { page: 1, rowsPerPage: 10 },
+        pagination: { rowsPerPage: 10 },
         txnType: 'S',
         arrType: [
           {text: 'Sale', value: 'S'},

@@ -194,7 +194,7 @@ export default {
       })
     },
     getTrans () {
-      this.$http.get('/api/payments?limit=15', {httpProgress: true}).then((restran) => {
+      this.$http.get('/api/payments?limit=25', {httpProgress: true}).then((restran) => {
         this.data = restran.data
       })
     }
