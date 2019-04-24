@@ -326,7 +326,13 @@
         this.txnRate = null
       },
       submitTrans () {
-        if (!confirm('Are you sure?')) { return }
+        var inv
+        if (this.txnLocation.dummy) {
+          inv = prompt('Please enter invoice number').trim()
+          if (inv === null || inv === '') { return }
+        } else {
+          if (!confirm('Are you sure?')) { return }
+        }
         let stTran = []
         for (let st of this.stock) {
           stTran.push({
@@ -341,6 +347,7 @@
         this.tranStock = {
           type: this.txnType,
           date: Date.parse(this.tranDate + ' ' + new Date().toLocaleTimeString()) / 1000,
+          invoice: inv,
           lcn_id: this.txnLocation.id,
           prt_id: this.txnParty ? this.txnParty.id : 0,
           tgt_lcn_id: this.txnTgtLocation ? this.txnTgtLocation.id : 0,
