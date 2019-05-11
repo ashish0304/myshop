@@ -206,10 +206,15 @@
     <v-pagination v-model="pgnAmRecd.page" :length="pages(pgnAmRecd, dataAmRecd)" circle>
     </v-pagination>
     </div>
+    <div>
+      <v-btn @click.native="exportData" color="primary" small block>Export to XLSX
+      </v-btn>
+    </div>
   </v-container>
 </template>
 
 <script>
+import XLSX from 'xlsx'
 export default {
   name: 'repdattran',
   props: {
@@ -283,6 +288,50 @@ export default {
     }
   },
   methods: {
+    exportData () {
+      this.$http.get(`/api/gstrep?locn=${this.repLocation}&dtfr=${(Date.parse(this.dtFrom) / 1000)}&dtto=${(Date.parse(this.dtTo) / 1000) + 86399}`, {httpProgress: true}).then((res) => {
+        let wb = XLSX.utils.book_new()
+        let wsSale = {}
+        let wsPurchase = {}
+        let jsnSale = []
+        let jsnPurchase = []
+        for (let sl of res.data.sales) {
+          jsnSale.push({
+            Date: new Date(sl.date * 1000).toLocaleDateString(),
+            'Invoice No.': sl.invoice,
+            'Party Name': sl.party,
+            GSTN: sl.gstn,
+            HSN: sl.hsn,
+            'GST Rate': sl.trate,
+            Amount: sl.amount,
+            Tax: sl.tax,
+            Total: Number(sl.amount + sl.tax)
+          })
+        }
+        for (let pr of res.data.purchase) {
+          jsnPurchase.push({
+            Date: new Date(pr.date * 1000).toLocaleDateString(),
+            'Invoice No.': pr.invoice,
+            'Party Name': pr.party,
+            GSTN: pr.gstn,
+            HSN: pr.hsn,
+            'GST Rate': pr.trate,
+            Amount: pr.amount,
+            Tax: pr.tax,
+            Total: Number(pr.amount + pr.tax)
+          })
+        }
+        if (jsnSale.length > 0) {
+          XLSX.utils.sheet_add_json(wsSale, jsnSale, {origin: 'A3'})
+          XLSX.utils.book_append_sheet(wb, wsSale, 'Sales')
+        }
+        if (jsnPurchase.length > 0) {
+          XLSX.utils.sheet_add_json(wsPurchase, jsnPurchase, {origin: 'A3'})
+          XLSX.utils.book_append_sheet(wb, wsPurchase, 'Purchase')
+        }
+        XLSX.writeFile(wb, this.dtFrom + ' to ' + this.dtTo + '.xlsx')
+      })
+    },
     pages (p, d) {
       return p.rowsPerPage ? Math.ceil(d.length / p.rowsPerPage) : 0
     },

@@ -84,7 +84,7 @@
         <tr @click="props.expanded=!props.expanded;getItmTrans(props.item.type, props.item.date, props.item.lcn_id)">
           <td class="text-xs-left">{{ props.item.locn }}</td>
           <td class="text-xs-left">{{ props.item.type }}</td>
-          <td class="text-xs-left">{{ props.item.date | toDate }}</td>
+          <td class="text-xs-left"><span v-show="props.item.invoice">{{props.item.invoice}} dt. </span>{{ props.item.date | toDate }}</td>
           <td class="text-xs-right">{{ props.item.amount | toAmount }}</td>
         </tr>
       </template>
@@ -161,7 +161,7 @@ export default {
       headSumry: [
         { text: 'Location', value: 'locn', sortable: false, align: 'left' },
         { text: 'Type', value: 'type', sortable: false, align: 'left' },
-        { text: 'Date', value: 'date', sortable: false, align: 'left' },
+        { text: 'Inv. Date', value: 'date', sortable: false, align: 'left' },
         { text: 'Amount', value: 'amount', sortable: false, align: 'right' }
       ],
       headItm: [
