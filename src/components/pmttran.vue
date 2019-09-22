@@ -138,7 +138,8 @@ export default {
         { text: 'Amount', value: 'amount', sortable: false }
       ],
       data: [],
-      trans: {}
+      trans: {},
+      timerId: null
     }
   },
   created () {
@@ -147,12 +148,16 @@ export default {
   },
   watch: {
     searchPrt (val) {
-      if (this.arrPrt.length > 0) { return }
-      this.ldgParty = true
+      if (!val) { return }
+      clearTimeout(this.timerId)
 
-      this.$http.get('/api/parties/' + val).then((res) => {
-        this.arrPrt = res.data
-      }).finally(() => (this.ldgParty = false))
+      this.timerId = setTimeout(() => {
+        this.ldgParty = true
+
+        this.$http.get('/api/parties/' + val).then((res) => {
+          this.arrPrt = res.data
+        }).finally(() => (this.ldgParty = false))
+      }, 500)
     },
     txnPrt: function () {
       if (!this.txnPrt) {

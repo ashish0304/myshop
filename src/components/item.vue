@@ -124,7 +124,8 @@ export default {
       ldgItem: false,
       data: [],
       pagination: { rowsPerPage: 25 },
-      searchItem: null
+      searchItem: null,
+      timerId: null
     }
   },
   created: function () {
@@ -152,12 +153,16 @@ export default {
       this.getTrans(this.txnItem.id)
     },
     searchItem (val) {
-      if (this.arrItem.length > 0) { return }
-      this.ldgItem = true
+      if (!val) { return }
+      clearTimeout(this.timerId)
 
-      this.$http.get(`/api/items?desc=${val}`).then((res) => {
-        this.arrItem = res.data
-      }).finally(() => (this.ldgItem = false))
+      this.timerId = setTimeout(() => {
+        this.ldgItem = true
+
+        this.$http.get(`/api/items?desc=${val}`).then((res) => {
+          this.arrItem = res.data
+        }).finally(() => (this.ldgItem = false))
+      }, 500)
     }
   },
   methods: {

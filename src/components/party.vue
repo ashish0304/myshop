@@ -184,7 +184,8 @@ export default {
       pagPmt: { rowsPerPage: 5 },
       searchParty: null,
       dtFrom: '',
-      dtTo: ''
+      dtTo: '',
+      timerId: null
     }
   },
   created: function () {
@@ -212,12 +213,16 @@ export default {
       this.getPartySumry(this.txnParty.id)
     },
     searchParty (val) {
-      if (this.arrParty.length > 0) { return }
-      this.ldgParty = true
+      if (!val) { return }
+      clearTimeout(this.timerId)
 
-      this.$http.get('/api/parties/' + val).then((res) => {
-        this.arrParty = res.data
-      }).finally(() => (this.ldgParty = false))
+      this.timerId = setTimeout(() => {
+        this.ldgParty = true
+
+        this.$http.get('/api/parties/' + val).then((res) => {
+          this.arrParty = res.data
+        }).finally(() => (this.ldgParty = false))
+      }, 500)
     }
   },
   methods: {

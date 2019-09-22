@@ -219,7 +219,8 @@
         stock: [],
         tranStock: null,
         tranInfo: false,
-        infoText: ''
+        infoText: '',
+        timerId: null
       }
     },
     beforeCreate () {
@@ -232,20 +233,28 @@
     },
     watch: {
       searchParty (val) {
-        if (this.arrParty.length > 0) { return }
-        this.ldgParty = true
+        if (!val) { return }
+        clearTimeout(this.timerId)
 
-        this.$http.get(`/api/partyacc/${val}`).then((res) => {
-          this.arrParty = res.data
-        }).finally(() => (this.ldgParty = false))
+        this.timerId = setTimeout(() => {
+          this.ldgParty = true
+
+          this.$http.get(`/api/partyacc/${val}`).then((res) => {
+            this.arrParty = res.data
+          }).finally(() => (this.ldgParty = false))
+        }, 500)
       },
       searchItem (val) {
-        if (this.arrItem.length > 0) { return }
-        this.ldgItem = true
+        if (!val) { return }
+        clearTimeout(this.timerId)
 
-        this.$http.get(`/api/items?desc=${val}`).then((res) => {
-          this.arrItem = res.data
-        }).finally(() => (this.ldgItem = false))
+        this.timerId = setTimeout(() => {
+          this.ldgItem = true
+
+          this.$http.get(`/api/items?desc=${val}`).then((res) => {
+            this.arrItem = res.data
+          }).finally(() => (this.ldgItem = false))
+        }, 500)
       },
       txnParty: function () {
         if (!this.txnParty) {

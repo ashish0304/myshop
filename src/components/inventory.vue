@@ -103,7 +103,8 @@ export default {
         { text: 'Quantity', value: 'quantity', sortable: false, align: 'right' }
       ],
       data: [],
-      searchItem: null
+      searchItem: null,
+      timerId: null
     }
   },
   created () {
@@ -122,12 +123,16 @@ export default {
       })
     },
     searchItem (val) {
-      if (this.arrItem.length > 0) { return }
-      this.ldgItem = true
+      if (!val) { return }
+      clearTimeout(this.timerId)
 
-      this.$http.get(`/api/items?desc=${val}`).then((res) => {
-        this.arrItem = res.data
-      }).finally(() => (this.ldgItem = false))
+      this.timerId = setTimeout(() => {
+        this.ldgItem = true
+
+        this.$http.get(`/api/items?desc=${val}`).then((res) => {
+          this.arrItem = res.data
+        }).finally(() => (this.ldgItem = false))
+      }, 500)
     },
     txnItem: function () {
       if (!this.txnItem) {
