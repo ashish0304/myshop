@@ -10,6 +10,7 @@
           label="Description"
           placeholder="Description"
           return-object
+          clearable
           hide-details>
         </v-select>
       </v-flex>
@@ -45,7 +46,8 @@
     <v-data-table
       :headers="head"
       :items="data"
-      :pagination.sync="pagination"
+      :page.sync="page"
+      :items-per-page="rowsPerPage"
       hide-actions
       class="elevation-1" >
       <template slot="items" slot-scope="props">
@@ -57,7 +59,11 @@
         <td class="text-xs-right">{{ props.item.amount | toAmount }}</td>
       </template>
     </v-data-table>
-    <v-pagination v-model="pagination.page" :length="pages" circle>
+    <v-pagination
+      v-model="page"
+      :length="pages"
+      @input="getTrans"
+      circle>
     </v-pagination>
   </v-container>
 </template>
@@ -82,39 +88,44 @@ export default {
         { text: 'Amount', value: 'amount', sortable: false, align: 'right' }
       ],
       data: [],
-      pagination: { rowsPerPage: 25 }
+      page: 1,
+      pages: 0,
+      rowsPerPage: 25
     }
   },
   created: function () {
     this.getAccounts()
-    if (this.id > 0) {
+    if (this.txnAccount.id > 0) {
       this.txnAccount = this.arrAccount[this.id]
     } else {
       this.initBlank()
     }
   },
   watch: {
-    '$route.params.id': function () {
-      if (this.id) {
+    '$route.params.id' () {
+      if (this.txnAccount.id) {
         this.txnAccount = this.arrAccount[this.id]
         this.getTrans()
       } else {
         this.initBlank()
       }
     },
-    'pagination.page': function () {
-      this.getTrans(this.txnAccount.id)
-    },
     'txnAccount.id' () {
-      if (!this.txnAccount || this.txnAccount.id === 0) {
+      if (!this.txnAccount || !this.txnAccount.id) {
         this.initBlank()
         return
       }
+      this.$http.get(`/api/acctrans?acc=${this.txnAccount.id}&count=true`, {httpProgress: true}).then((res) => {
+        this.pages = Math.ceil(res.data / this.rowsPerPage)
+      })
+      this.page = 1
       this.getTrans()
     }
   },
   methods: {
     initBlank () {
+      this.page = 1
+      this.pages = 0
       this.txnAccount = {}
       this.$set(this.txnAccount, 'id', null)
       this.$set(this.txnAccount, 'description', null)
@@ -127,9 +138,9 @@ export default {
         this.txnAccount = this.arrAccount[0]
       })
     },
-    getTrans () {
+    getTrans (p) {
       if (this.txnAccount.id < 1) { return }
-      this.$http.get(`/api/acctrans?acc=${this.txnAccount.id}`, {httpProgress: true}).then((res) => {
+      this.$http.get(`/api/acctrans?acc=${this.txnAccount.id}&offset=${(this.page - 1) * this.rowsPerPage}&limit=${this.rowsPerPage}`, {httpProgress: true}).then((res) => {
         this.data = res.data
       })
     },
@@ -145,11 +156,6 @@ export default {
           alert('Added successfully!')
         })
       }
-    }
-  },
-  computed: {
-    pages () {
-      return this.pagination.rowsPerPage ? Math.ceil(this.data.length / this.pagination.rowsPerPage) : 0
     }
   }
 }

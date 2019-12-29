@@ -1,7 +1,7 @@
 <template>
   <v-container class="ma-0 pa-0" fluid>
     <v-layout row wrap>
-      <v-flex xs8>
+      <v-flex xs7>
         <v-autocomplete
           :items="arrParty"
           v-model="txnParty"
@@ -17,7 +17,7 @@
           hide-details>
         </v-autocomplete>
       </v-flex>
-      <v-flex xs4>
+      <v-flex xs5>
         <v-text-field
           v-model="txnParty.gstn"
           label="GSTN"
@@ -124,16 +124,15 @@
     </v-data-table>
     <v-pagination v-model="pagPmt.page" :length="pmtPages" v-if="dataPmt.length>0" circle>
     </v-pagination>
-    <v-layout v-show="txnParty.id" row wrap>
-      <v-flex xs4>
+    <v-layout v-if="txnParty.id" row wrap>
+      <v-flex>
         <v-text-field type="date" label="From" v-model="dtFrom" hide-details/>
       </v-flex>
-      <v-flex xs4>
+      <v-flex>
         <v-text-field type="date" label="To" v-model="dtTo" hide-details/>
       </v-flex>
-      <v-flex xs4>
-        <v-btn @click.native="saveData" color="primary" small top>Save As XL Sheet
-        </v-btn>
+      <v-flex>
+        <v-btn @click.native="saveData" color="primary" small top>Save As XL Sheet</v-btn>
       </v-flex>
     </v-layout>
   </v-container>
@@ -180,8 +179,8 @@ export default {
       dataSumry: [],
       dataItm: [],
       dataPmt: [],
-      pagSumry: { rowsPerPage: 10 },
-      pagPmt: { rowsPerPage: 5 },
+      pagSumry: { page: 1, rowsPerPage: 10 },
+      pagPmt: { page: 1, rowsPerPage: 5 },
       searchParty: null,
       dtFrom: '',
       dtTo: '',

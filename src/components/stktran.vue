@@ -137,7 +137,7 @@
         </th>
       </template>
       <template slot="items" slot-scope="props">
-        <td><v-btn class="pa-0 ma-0" @click.native="stock.splice(props.index, 1)" small icon><v-icon>delete</v-icon></v-btn></td>
+        <td><v-btn class="pa-0 ma-0" @click.native="stock.splice(((pagination.page - 1) * pagination.rowsPerPage) + props.index, 1)" small icon><v-icon>delete</v-icon></v-btn></td>
         <td><router-link :to="'/item/'+props.item.id">{{ props.item.desc }}<div v-if="props.item.gst>0">({{props.item.gst}}%)</div></router-link></td>
         <td class="text-xs-right">
           <v-edit-dialog>{{ props.item.qty }}
@@ -181,7 +181,7 @@
     },
     data () {
       return {
-        pagination: { rowsPerPage: 10 },
+        pagination: { page: 1, rowsPerPage: 10 },
         txnType: 'S',
         arrType: [
           {text: 'Sale', value: 'S'},
