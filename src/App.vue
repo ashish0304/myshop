@@ -46,6 +46,9 @@
           <v-list-tile to="/inventory">
             Inventory
           </v-list-tile>
+          <v-list-tile @click.native="backup">
+            Backup
+          </v-list-tile>
           <v-list-tile @click.native="getlog">
             Save Log
           </v-list-tile>
@@ -93,6 +96,11 @@
       }
     },
     methods: {
+      backup () {
+        this.$http.get('/api/backup', {httpProgress: true}).then((res) => {
+          alert('Done!')
+        })
+      },
       getlog () {
         this.$http.get('/api/log', {httpProgress: true}).then((response) => {
           let url = window.URL.createObjectURL(new Blob([response.data]))
